@@ -2,10 +2,28 @@
 import { useTimetable } from '../context/TimetableContext';
 import { Sparkles, CalendarPlus, Users } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useRef } from 'react';
 
 const Dashboard = () => {
   const { academicYears, groups } = useTimetable();
   const navigate = useNavigate();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUploadClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      alert(`'${file.name}' 파일이 성공적으로 업로드되었습니다. (MVP 기능)`);
+    }
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   return (
     <div className="fade-in">
@@ -20,7 +38,14 @@ const Dashboard = () => {
           </div>
           <p style={{ fontSize: '1.2rem', color: 'var(--text-color)' }}><strong>{academicYears[0].label}</strong></p>
           <p>{academicYears[0].startDate} ~ {academicYears[0].endDate}</p>
-          <button className="btn" style={{ marginTop: '20px' }} onClick={() => alert('새 학사연도 생성 기능은 준비 중입니다.')}>
+          <input 
+            type="file" 
+            ref={fileInputRef} 
+            style={{ display: 'none' }} 
+            accept=".xlsx,.xls,.csv,.json"
+            onChange={handleFileChange} 
+          />
+          <button className="btn" style={{ marginTop: '20px' }} onClick={handleUploadClick}>
             <Sparkles size={18} /> 새 학사연도 만들기
           </button>
         </div>
