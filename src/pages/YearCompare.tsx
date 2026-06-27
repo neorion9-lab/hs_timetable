@@ -38,8 +38,8 @@ const YearCompare = () => {
           <thead>
             <tr style={{ borderBottom: '2px solid #f1f2f6' }}>
               <th style={{ padding: '20px 15px', color: '#718093' }}>구분</th>
-              <th style={{ padding: '20px 15px', color: '#718093' }}>2024-2025 (작년)</th>
-              <th style={{ padding: '20px 15px', color: '#718093' }}>2025-2026 (올해)</th>
+              <th style={{ padding: '20px 15px', color: '#718093' }}>2025학년도 (작년)</th>
+              <th style={{ padding: '20px 15px', color: '#718093' }}>2026학년도 (올해)</th>
               <th style={{ padding: '20px 15px', color: '#718093' }}>상태</th>
             </tr>
           </thead>

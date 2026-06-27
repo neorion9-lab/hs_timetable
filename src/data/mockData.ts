@@ -48,11 +48,11 @@ export interface ClassBlock {
 export const mockData = {
   academicYears: [
     {
-      year_id: "2025-2026",
-      label: "2025-2026 학사연도",
-      startDate: "2025-03-01",
-      endDate: "2026-02-28",
-      holidays: ["2025-04-01", "2025-04-02", "2025-05-05"],
+      year_id: "2026",
+      label: "2026학년도",
+      startDate: "2026-03-01",
+      endDate: "2027-02-28",
+      holidays: ["2026-05-05", "2026-09-24", "2026-10-09"],
     },
   ],
   groups: [
@@ -105,7 +105,7 @@ export const mockData = {
   classBlocks: [
     {
       block_id: "CB001",
-      year_id: "2025-2026",
+      year_id: "2026",
       subject_id: "SUB001",
       teacher_id: "T001",
       room_id: "R001",
@@ -117,7 +117,7 @@ export const mockData = {
     },
     {
       block_id: "CB002",
-      year_id: "2025-2026",
+      year_id: "2026",
       subject_id: "SUB003",
       teacher_id: "T002",
       room_id: "R002",
