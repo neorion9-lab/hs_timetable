@@ -14,7 +14,7 @@ function App() {
           <Calendar size={28} color="var(--primary-color)" style={{ marginTop: '4px' }} />
           <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.2' }}>
             <span>시간표</span>
-            <span style={{ fontSize: '1.2rem' }}>생성 도우미</span>
+            <span style={{ fontSize: '1.2rem' }}>배정 도우미</span>
           </div>
         </h1>
         <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
