@@ -129,7 +129,7 @@ const GroupManager = () => {
 
   return (
     <div className="fade-in">
-      <h1 className="page-title">학과 그룹 관리 🧑‍🤝‍🧑</h1>
+      <h1 className="page-title">그룹 관리 🧑‍🤝‍🧑</h1>
       <p className="page-subtitle">원하는 학군 그룹을 끌어 앤 드롭으로 구성하세요.</p>
 
       <DndContext sensors={sensors} collisionDetection={closestCorners} onDragOver={handleDragOver} onDragEnd={handleDragEnd}>
