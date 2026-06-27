@@ -12,7 +12,7 @@ function App() {
       <nav className="sidebar glass-panel" style={{ borderRadius: '0 20px 20px 0', borderLeft: 'none' }}>
         <h1>
           <Calendar size={28} color="var(--primary-color)" />
-          antigravity
+          시간표 생성 도우미
         </h1>
         <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
           <Home size={20} /> 대시보드

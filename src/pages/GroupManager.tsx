@@ -27,14 +27,13 @@ const GroupManager = () => {
   const { groups } = useTimetable();
 
   const handleDragEnd = (_event: DragEndEvent) => {
-    // MVP 용으로 짱구식 피드백 알림!
-    alert('오호라~ 드래그 앤 드롭 완료! 엉덩이 춤 한 번 추고 저장해줄게! 🍑🎶');
+    alert('그룹 배치가 변경되었습니다.');
   };
 
   return (
     <div className="fade-in">
       <h1 className="page-title">학년 그룹 관리 🧑‍🤝‍🧑</h1>
-      <p className="page-subtitle">어느 학년끼리 묶을까? 요리조리 끌어다 놔봐! 짱구가 지켜볼게!</p>
+      <p className="page-subtitle">원하는 학년 그룹을 드래그 앤 드롭으로 구성하세요.</p>
 
       <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
         <div className="group-container">

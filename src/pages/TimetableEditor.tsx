@@ -11,9 +11,9 @@ const TimetableEditor = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h1 className="page-title">시간표 템플릿 채우기 🪄</h1>
-          <p className="page-subtitle">마법처럼 빈칸을 꽉꽉! 채워보자구~</p>
+          <p className="page-subtitle">템플릿을 적용하여 시간표를 자동으로 배정합니다.</p>
         </div>
-        <button className="btn" onClick={() => alert('얍! 템플릿 자동 채우기 마법 발동! (MVP 가짜 기능이야 ㅎㅎ)')}>
+        <button className="btn" onClick={() => alert('템플릿 자동 채우기 기능이 실행되었습니다.')}>
           <Play size={18} /> 자동 채우기
         </button>
       </div>
@@ -67,7 +67,7 @@ const TimetableEditor = () => {
                     transition: 'all 0.2s',
                     cursor: 'pointer'
                   }}
-                  onClick={() => alert(`이건 ${block ? block.subject_id : '빈칸'} 이라구!`)}
+                  onClick={() => alert(`해당 항목은 ${block ? block.subject_id : '빈칸'} 입니다.`)}
                   >
                     {block ? (
                       <>

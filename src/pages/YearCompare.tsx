@@ -4,7 +4,7 @@ const YearCompare = () => {
   return (
     <div className="fade-in">
       <h1 className="page-title">연도별 차이점 비교 📊</h1>
-      <p className="page-subtitle">작년이랑 뭐가 달라졌을까? 한눈에 딱 보이게 짱구가 정리해 줄게!</p>
+      <p className="page-subtitle">이전 연도와 비교하여 변경된 사항을 확인하세요.</p>
 
       <div className="dashboard-grid">
         <div className="card glass-panel" style={{ textAlign: 'center' }}>
@@ -12,7 +12,7 @@ const YearCompare = () => {
           <div style={{ fontSize: '3.5rem', fontWeight: 'bold', color: 'var(--primary-color)', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
             <ArrowUpRight size={45} /> 5건
           </div>
-          <p style={{ marginTop: '15px', fontWeight: 600 }}>작년보다 조금 늘었어 ㅠㅠ</p>
+          <p style={{ marginTop: '15px', fontWeight: 600 }}>전년 대비 증가</p>
         </div>
 
         <div className="card glass-panel" style={{ textAlign: 'center' }}>
@@ -20,7 +20,7 @@ const YearCompare = () => {
           <div style={{ fontSize: '3.5rem', fontWeight: 'bold', color: '#1dd1a1', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
             <ArrowUpRight size={45} /> 12차시
           </div>
-          <p style={{ marginTop: '15px', fontWeight: 600 }}>AI 수업이 새로 생겼지!</p>
+          <p style={{ marginTop: '15px', fontWeight: 600 }}>신규 수업 추가됨</p>
         </div>
 
         <div className="card glass-panel" style={{ textAlign: 'center' }}>
@@ -28,7 +28,7 @@ const YearCompare = () => {
           <div style={{ fontSize: '3.5rem', fontWeight: 'bold', color: 'var(--secondary-color)', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px' }}>
             <Minus size={45} /> 0건
           </div>
-          <p style={{ marginTop: '15px', fontWeight: 600 }}>오! 완벽해! 충돌 제로!</p>
+          <p style={{ marginTop: '15px', fontWeight: 600 }}>충돌 없음</p>
         </div>
       </div>
 
