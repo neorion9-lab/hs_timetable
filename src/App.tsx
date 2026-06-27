@@ -10,9 +10,12 @@ function App() {
   return (
     <div className="app-container">
       <nav className="sidebar glass-panel" style={{ borderRadius: '0 20px 20px 0', borderLeft: 'none' }}>
-        <h1>
-          <Calendar size={28} color="var(--primary-color)" />
-          시간표 생성 도우미
+        <h1 style={{ alignItems: 'flex-start' }}>
+          <Calendar size={28} color="var(--primary-color)" style={{ marginTop: '4px' }} />
+          <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.2' }}>
+            <span>시간표</span>
+            <span style={{ fontSize: '1.2rem' }}>생성 도우미</span>
+          </div>
         </h1>
         <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
           <Home size={20} /> 대시보드
