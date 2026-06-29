@@ -4,7 +4,6 @@ import { Play, MoreVertical } from 'lucide-react';
 
 const TimetableEditor = () => {
   const { groups, classBlocks, setClassBlocks } = useTimetable();
-  const [selectedGroup, setSelectedGroup] = useState(groups[0]?.group_id || '');
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   const handleAutoFill = () => {
@@ -80,114 +79,128 @@ const TimetableEditor = () => {
         </button>
       </div>
 
-      <div className="card glass-panel" style={{ marginTop: '20px' }}>
-        <div style={{ display: 'flex', gap: '15px', marginBottom: '20px' }}>
-          {groups.map(g => (
-            <button 
-              key={g.group_id} 
-              className={selectedGroup === g.group_id ? 'btn' : 'btn btn-secondary'}
-              onClick={() => setSelectedGroup(g.group_id)}
-            >
-              {g.name}
-            </button>
-          ))}
-        </div>
-
+      <div className="card glass-panel" style={{ marginTop: '20px', padding: '20px', overflowX: 'auto' }}>
         <div style={{ 
           display: 'grid', 
-          gridTemplateColumns: '80px repeat(5, 1fr)', 
-          gap: '10px',
+          gridTemplateColumns: '80px repeat(30, minmax(55px, 1fr))', 
+          gap: '4px',
           background: '#f1f2f6',
-          padding: '20px',
-          borderRadius: '24px'
+          padding: '15px',
+          borderRadius: '16px',
+          minWidth: '1700px'
         }}>
-          {/* Header */}
-          <div style={{ fontWeight: 'bold', textAlign: 'center', padding: '10px', gridColumn: 1, gridRow: 1 }}>교시</div>
+          {/* Header Row 1 */}
+          <div style={{ fontWeight: 'bold', textAlign: 'center', padding: '10px', gridColumn: 1, gridRow: '1 / span 2', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '2px solid #dcdde1' }}>그룹</div>
           {['월', '화', '수', '목', '금'].map((day, i) => (
-            <div key={day} style={{ fontWeight: 'bold', textAlign: 'center', padding: '10px', gridColumn: i + 2, gridRow: 1 }}>{day}</div>
+            <div key={day} style={{ fontWeight: 'bold', textAlign: 'center', padding: '10px', gridColumn: `${i * 6 + 2} / span 6`, gridRow: 1, borderBottom: '2px solid #dcdde1', borderRight: i < 4 ? '2px solid #dcdde1' : 'none' }}>
+              {day}
+            </div>
           ))}
 
-          {/* Slots */}
-          {[1, 2, 3, 4, 5, 6].map(period => (
-            <React.Fragment key={period}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#718093', gridColumn: 1, gridRow: period + 1 }}>{period}교시</div>
-              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map((day, dayIndex) => {
-                const block = classBlocks.find(b => b.group_id === selectedGroup && b.day_of_week === day && b.period_start <= period && b.period_start + b.duration > period);
-                
-                if (block && block.period_start < period) return null;
+          {/* Header Row 2 */}
+          {['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].flatMap((day, d_index) => 
+            [1, 2, 3, 4, 5, 6].map(period => (
+              <div key={`header-${day}-${period}`} style={{ fontWeight: 'bold', textAlign: 'center', padding: '5px', gridColumn: 1 + (d_index * 6) + period, gridRow: 2, borderBottom: '2px solid #dcdde1', color: '#718093', fontSize: '0.8rem', borderRight: period === 6 && d_index < 4 ? '2px solid #dcdde1' : 'none' }}>
+                {period}
+              </div>
+            ))
+          )}
 
-                const cellId = `${period}-${day}`;
-                
-                return (
-                  <div key={cellId} style={{ 
-                    gridColumn: dayIndex + 2,
-                    gridRow: block ? `${period + 1} / span ${block.duration}` : `${period + 1} / span 1`,
-                    background: block ? (block.isExternal ? 'var(--primary-light)' : 'var(--secondary-color)') : 'white', 
-                    border: '1px dashed #dcdde1',
-                    borderRadius: '16px',
-                    padding: '15px',
-                    textAlign: 'center',
-                    minHeight: block ? `${90 * block.duration + 10 * (block.duration - 1)}px` : '90px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    position: 'relative',
-                    boxShadow: block ? '0 4px 10px rgba(0,0,0,0.05)' : 'none',
-                    transition: 'all 0.2s',
-                    cursor: 'pointer',
-                    zIndex: block ? 5 : 1
-                  }}
-                  onClick={() => {
-                    if (activeDropdown) {
-                      setActiveDropdown(null);
-                    } else {
-                      alert(`해당 항목은 ${block ? block.subject_id : '빈칸'} 입니다.`);
-                    }
-                  }}
-                  >
-                    <button 
-                      style={{ position: 'absolute', top: '8px', right: '8px', background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
-                      onClick={(e) => { 
-                        e.stopPropagation(); 
-                        setActiveDropdown(activeDropdown === cellId ? null : cellId); 
-                      }}
-                    >
-                      <MoreVertical size={16} color="#718093" />
-                    </button>
+          {/* Slots per Group */}
+          {groups.map((group, g_index) => {
+            const rowIdx = g_index + 3;
+            
+            return (
+              <React.Fragment key={group.group_id}>
+                {/* Group Header */}
+                <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gridColumn: 1, gridRow: rowIdx, borderRight: '2px solid #dcdde1', background: 'white', borderRadius: '8px', padding: '5px', margin: '2px 0' }}>
+                  {group.name}
+                </div>
+
+                {/* Day/Period Cells */}
+                {['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].flatMap((day, d_index) => 
+                  [1, 2, 3, 4, 5, 6].map(period => {
+                    const block = classBlocks.find(b => b.group_id === group.group_id && b.day_of_week === day && b.period_start <= period && b.period_start + b.duration > period);
                     
-                    {activeDropdown === cellId && (
-                      <div style={{
-                        position: 'absolute',
-                        top: '30px',
-                        right: '8px',
-                        background: 'white',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    if (block && block.period_start < period) return null;
+
+                    const colIdx = 1 + (d_index * 6) + period;
+                    const cellId = `${group.group_id}-${day}-${period}`;
+                    
+                    return (
+                      <div key={cellId} style={{ 
+                        gridColumn: block ? `${colIdx} / span ${block.duration}` : `${colIdx} / span 1`,
+                        gridRow: rowIdx,
+                        background: block ? (block.isExternal ? 'var(--primary-light)' : 'var(--secondary-color)') : 'white', 
+                        border: '1px dashed #dcdde1',
                         borderRadius: '8px',
                         padding: '5px',
-                        zIndex: 10,
+                        textAlign: 'center',
+                        minHeight: '60px',
                         display: 'flex',
                         flexDirection: 'column',
-                        minWidth: '100px'
-                      }}>
-                        <button style={{ padding: '8px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.9rem', color: '#2f3640' }} onClick={(e) => { e.stopPropagation(); alert('과목 추가'); setActiveDropdown(null); }}>과목 추가</button>
-                        <button style={{ padding: '8px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.9rem', color: '#2f3640' }} onClick={(e) => { e.stopPropagation(); alert('과목 변경'); setActiveDropdown(null); }}>과목 변경</button>
-                        <button style={{ padding: '8px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.9rem', color: '#d63031' }} onClick={(e) => { e.stopPropagation(); alert('과목 삭제'); setActiveDropdown(null); }}>과목 삭제</button>
+                        justifyContent: 'center',
+                        position: 'relative',
+                        boxShadow: block ? '0 2px 5px rgba(0,0,0,0.05)' : 'none',
+                        transition: 'all 0.2s',
+                        cursor: 'pointer',
+                        zIndex: block ? 5 : 1,
+                        margin: '2px 0',
+                        borderRight: period === 6 && d_index < 4 ? '2px solid #dcdde1' : '1px dashed #dcdde1'
+                      }}
+                      onClick={() => {
+                        if (activeDropdown) {
+                          setActiveDropdown(null);
+                        } else {
+                          alert(`해당 항목은 ${block ? block.subject_id : '빈칸'} 입니다.`);
+                        }
+                      }}
+                      >
+                        <button 
+                          style={{ position: 'absolute', top: '2px', right: '2px', background: 'none', border: 'none', cursor: 'pointer', padding: '2px' }}
+                          onClick={(e) => { 
+                            e.stopPropagation(); 
+                            setActiveDropdown(activeDropdown === cellId ? null : cellId); 
+                          }}
+                        >
+                          <MoreVertical size={14} color="#718093" />
+                        </button>
+                        
+                        {activeDropdown === cellId && (
+                          <div style={{
+                            position: 'absolute',
+                            top: '20px',
+                            right: '2px',
+                            background: 'white',
+                            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                            borderRadius: '8px',
+                            padding: '5px',
+                            zIndex: 10,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            minWidth: '90px'
+                          }}>
+                            <button style={{ padding: '6px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.8rem', color: '#2f3640' }} onClick={(e) => { e.stopPropagation(); alert('과목 추가'); setActiveDropdown(null); }}>과목 추가</button>
+                            <button style={{ padding: '6px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.8rem', color: '#2f3640' }} onClick={(e) => { e.stopPropagation(); alert('과목 변경'); setActiveDropdown(null); }}>과목 변경</button>
+                            <button style={{ padding: '6px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.8rem', color: '#d63031' }} onClick={(e) => { e.stopPropagation(); alert('과목 삭제'); setActiveDropdown(null); }}>과목 삭제</button>
+                          </div>
+                        )}
+                        {block ? (
+                          <>
+                            <strong style={{ fontSize: '0.85rem' }}>{block.subject_id}</strong>
+                            <span style={{ fontSize: '0.7rem', color: 'rgba(0,0,0,0.6)' }}>교사: {block.teacher_id}</span>
+                            {block.isExternal && <span style={{ fontSize: '0.65rem', color: '#d63031', marginTop: '2px', fontWeight: 'bold' }}>외부 강사</span>}
+                          </>
+                        ) : (
+                          <span style={{ color: '#bdc3c7', fontSize: '0.8rem' }}>비었음</span>
+                        )}
                       </div>
-                    )}
-                    {block ? (
-                      <>
-                        <strong style={{ fontSize: '1.1rem' }}>{block.subject_id}</strong>
-                        <span style={{ fontSize: '0.85rem', color: 'rgba(0,0,0,0.6)' }}>교사: {block.teacher_id}</span>
-                        {block.isExternal && <span style={{ fontSize: '0.75rem', color: '#d63031', marginTop: '5px', fontWeight: 'bold' }}>외부 강사</span>}
-                      </>
-                    ) : (
-                      <span style={{ color: '#bdc3c7', fontSize: '0.9rem' }}>비었음</span>
-                    )}
-                  </div>
-                )
-              })}
-            </React.Fragment>
-          ))}
+                    )
+                  })
+                )}
+              </React.Fragment>
+            )
+          })}
         </div>
       </div>
     </div>
