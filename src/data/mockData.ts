@@ -39,6 +39,7 @@ export interface ClassBlock {
   teacher_id: string;
   room_id: string;
   group_id: string;
+  class_num?: number;
   day_of_week: string;
   period_start: number;
   duration: number;
@@ -58,15 +59,15 @@ export const mockData = {
   groups: [
     {
       group_id: "GRP_A",
-      name: "그룹 A",
+      name: "배정 대상",
       dynamic: true,
-      memberGradeIds: ["G1", "G2"],
+      memberGradeIds: [],
     },
     {
       group_id: "GRP_B",
-      name: "그룹 B",
+      name: "학년",
       dynamic: true,
-      memberGradeIds: ["G3", "G4", "G5", "G6"],
+      memberGradeIds: ["G1", "G2", "G3", "G4", "G5", "G6"],
     },
   ],
   templateSets: [

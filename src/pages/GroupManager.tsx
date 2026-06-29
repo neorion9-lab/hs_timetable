@@ -46,7 +46,7 @@ const DroppableColumn = ({ id, name, items }: { id: string, name: string, items:
       <h3>{name}</h3>
       <SortableContext id={id} items={items} strategy={verticalListSortingStrategy}>
         {items.map(gradeId => (
-          <SortableItem key={gradeId} id={gradeId} grade={`초등학교 ${gradeId.replace('G', '')}학년`} />
+          <SortableItem key={gradeId} id={gradeId} grade={`${gradeId.replace('G', '')}학년`} />
         ))}
       </SortableContext>
     </div>
