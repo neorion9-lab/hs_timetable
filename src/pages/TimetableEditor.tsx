@@ -3,9 +3,70 @@ import { useTimetable } from '../context/TimetableContext';
 import { Play, MoreVertical } from 'lucide-react';
 
 const TimetableEditor = () => {
-  const { groups, classBlocks } = useTimetable();
+  const { groups, classBlocks, setClassBlocks } = useTimetable();
   const [selectedGroup, setSelectedGroup] = useState(groups[0]?.group_id || '');
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  const handleAutoFill = () => {
+    const newBlocks = [
+      {
+        block_id: "CB_AUTO_1",
+        year_id: "2026",
+        subject_id: "국어 (불러옴)",
+        teacher_id: "T101",
+        room_id: "R101",
+        group_id: "GRP_A",
+        day_of_week: "Mon",
+        period_start: 3,
+        duration: 1,
+        isExternal: false,
+      },
+      {
+        block_id: "CB_AUTO_2",
+        year_id: "2026",
+        subject_id: "수학 (불러옴)",
+        teacher_id: "T102",
+        room_id: "R102",
+        group_id: "GRP_A",
+        day_of_week: "Wed",
+        period_start: 2,
+        duration: 2,
+        isExternal: false,
+      },
+      {
+        block_id: "CB_AUTO_3",
+        year_id: "2026",
+        subject_id: "영어 (불러옴)",
+        teacher_id: "T103",
+        room_id: "R103",
+        group_id: "GRP_B",
+        day_of_week: "Tue",
+        period_start: 1,
+        duration: 2,
+        isExternal: false,
+      },
+      {
+        block_id: "CB_AUTO_4",
+        year_id: "2026",
+        subject_id: "과학 (불러옴)",
+        teacher_id: "T104",
+        room_id: "R104",
+        group_id: "GRP_B",
+        day_of_week: "Thu",
+        period_start: 4,
+        duration: 1,
+        isExternal: true,
+      }
+    ];
+    
+    setClassBlocks(prev => {
+      const existingIds = prev.map(b => b.block_id);
+      const toAdd = newBlocks.filter(b => !existingIds.includes(b.block_id));
+      return [...prev, ...toAdd];
+    });
+    
+    alert('시간표 불러오기에서 가져온 과목들이 자동으로 채워졌습니다!');
+  };
 
   return (
     <div className="fade-in">
@@ -14,7 +75,7 @@ const TimetableEditor = () => {
           <h1 className="page-title">시간표 템플릿 채우기 🪄</h1>
           <p className="page-subtitle">템플릿을 적용하여 시간표를 자동으로 배정합니다.</p>
         </div>
-        <button className="btn" onClick={() => alert('템플릿 자동 채우기 기능이 실행되었습니다.')}>
+        <button className="btn" onClick={handleAutoFill}>
           <Play size={18} /> 자동 채우기
         </button>
       </div>
