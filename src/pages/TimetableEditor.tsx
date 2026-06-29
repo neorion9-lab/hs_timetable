@@ -110,7 +110,15 @@ const TimetableEditor = () => {
           {(() => {
             const assignedGroup = groups.find(g => g.name === '배정 대상');
             const assignedGrades = assignedGroup ? assignedGroup.memberGradeIds : [];
-            const mockClasses = [1, 2, 3, 4, 5]; // 1반 ~ 5반
+            
+            const classCounts: Record<string, number> = {
+              G1: 7,
+              G2: 6,
+              G3: 8,
+              G4: 6,
+              G5: 8,
+              G6: 7
+            };
 
             let currentRowIdx = 3;
 
@@ -120,7 +128,8 @@ const TimetableEditor = () => {
               </div>
             ) : assignedGrades.map((gradeId) => {
               const startRowIdx = currentRowIdx;
-              const numClasses = mockClasses.length;
+              const numClasses = classCounts[gradeId] || 5;
+              const gradeClasses = Array.from({ length: numClasses }, (_, i) => i + 1);
               const gradeLabel = `${gradeId.replace('G', '')}학년`;
               
               currentRowIdx += numClasses;
@@ -133,7 +142,7 @@ const TimetableEditor = () => {
                   </div>
 
                   {/* Class Rows */}
-                  {mockClasses.map((classNum, classIdx) => {
+                  {gradeClasses.map((classNum, classIdx) => {
                     const rowIdx = startRowIdx + classIdx;
                     const isLastClass = classIdx === numClasses - 1;
                     
