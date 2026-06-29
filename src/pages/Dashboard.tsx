@@ -18,81 +18,99 @@ const Dashboard = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Simulate parsing the file and populating blocks for assigned grades
       const assignedGroup = groups.find(g => g.name === '배정 대상');
       const assignedGrades = assignedGroup ? assignedGroup.memberGradeIds : [];
 
-      if (assignedGrades.length > 0) {
-        const newBlocks: any[] = [];
-        const classCounts: Record<string, number> = {
-          G1: 7, G2: 6, G3: 8, G4: 6, G5: 8, G6: 7
-        };
-        const subjects = ['국어', '수학', '사회', '과학', '영어', '체육', '음악', '미술', '실과', '도덕', '창체'];
-        const teachers = ['홍길동', '김철수', '이영희', '박민수', '최지우', '정우성'];
-
-        assignedGrades.forEach(gradeId => {
-          const numClasses = classCounts[gradeId] || 5;
-          for (let classNum = 1; classNum <= numClasses; classNum++) {
-            ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].forEach((day, d_idx) => {
-              // Randomize slightly for variety
-              const subIdx1 = (classNum * 3 + d_idx) % subjects.length;
-              const subIdx2 = (classNum * 2 + d_idx + 3) % subjects.length;
-              const subIdx3 = (classNum * 5 + d_idx + 1) % subjects.length;
-              
-              // Morning block (2 hours)
-              newBlocks.push({
-                block_id: `CB_${gradeId}_${classNum}_${day}_1`,
-                year_id: "2026",
-                subject_id: subjects[subIdx1],
-                teacher_id: teachers[(classNum + d_idx) % teachers.length],
-                room_id: `본관 ${classNum}반`,
-                group_id: gradeId,
-                class_num: classNum,
-                day_of_week: day,
-                period_start: 1,
-                duration: 2,
-                isExternal: false,
-              });
-              
-              // Afternoon block 1 (1 hour)
-              newBlocks.push({
-                block_id: `CB_${gradeId}_${classNum}_${day}_3`,
-                year_id: "2026",
-                subject_id: subjects[subIdx2],
-                teacher_id: teachers[(classNum + d_idx + 1) % teachers.length],
-                room_id: `특별실`,
-                group_id: gradeId,
-                class_num: classNum,
-                day_of_week: day,
-                period_start: 3,
-                duration: 1,
-                isExternal: d_idx % 2 === 0, // Some are external
-              });
-              
-              // Afternoon block 2 (2 hours)
-              newBlocks.push({
-                block_id: `CB_${gradeId}_${classNum}_${day}_4`,
-                year_id: "2026",
-                subject_id: subjects[subIdx3],
-                teacher_id: teachers[(classNum + d_idx + 2) % teachers.length],
-                room_id: `본관 ${classNum}반`,
-                group_id: gradeId,
-                class_num: classNum,
-                day_of_week: day,
-                period_start: 4,
-                duration: 2,
-                isExternal: false,
-              });
-            });
-          }
-        });
-        setClassBlocks(newBlocks);
-      } else {
+      if (assignedGrades.length === 0) {
         alert('그룹 관리에서 배정 대상 학년을 먼저 설정해야 시간표가 생성됩니다.');
+        if (fileInputRef.current) fileInputRef.current.value = '';
+        return;
       }
 
-      alert(`'${file.name}' 시간표 파일이 성공적으로 불러와졌습니다!`);
-      navigate('/editor');
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const data = new Uint8Array(e.target?.result as ArrayBuffer);
+          const XLSX = await import('xlsx');
+          const workbook = XLSX.read(data, { type: 'array' });
+          const sheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[sheetName];
+          const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as any[][];
+
+          const newBlocks: any[] = [];
+          
+          let currentGrade = "";
+          for(let r = 2; r < jsonData.length; r++) {
+            const row = jsonData[r];
+            if (!row || row.length === 0) continue;
+            
+            // Check grade string
+            if (row[0]) {
+              const match = row[0].toString().match(/(\d)/);
+              if (match) currentGrade = `G${match[1]}`;
+            }
+            if (!currentGrade || !assignedGrades.includes(currentGrade)) continue;
+            
+            const classStr = row[1];
+            if (!classStr || typeof classStr !== 'string' || !classStr.includes('반')) continue;
+            const classNum = parseInt(classStr.replace('반', ''));
+            
+            const days = [
+              { name: 'Mon', start: 2, periods: 6 },
+              { name: 'Tue', start: 8, periods: 6 },
+              { name: 'Wed', start: 14, periods: 5 },
+              { name: 'Thu', start: 19, periods: 6 },
+              { name: 'Fri', start: 25, periods: 6 }
+            ];
+            
+            for(const day of days) {
+              for(let p = 0; p < day.periods; p++) {
+                const colIdx = day.start + p;
+                let val = row[colIdx];
+                if (val) {
+                  val = val.toString().trim();
+                  let fullName = val;
+                  if (val === '국') fullName = '국어';
+                  if (val === '수') fullName = '수학';
+                  if (val === '통') fullName = '통합';
+                  if (val === '창') fullName = '창체';
+                  if (val === '영') fullName = '영어';
+                  if (val === '사') fullName = '사회';
+                  if (val === '과') fullName = '과학';
+                  if (val === '체') fullName = '체육';
+                  if (val === '음') fullName = '음악';
+                  if (val === '미') fullName = '미술';
+                  if (val === '실') fullName = '실과';
+                  if (val === '도') fullName = '도덕';
+                  
+                  newBlocks.push({
+                     block_id: `CB_EXCEL_${currentGrade}_${classNum}_${day.name}_${p+1}`,
+                     year_id: "2026",
+                     subject_id: fullName,
+                     teacher_id: "담당",
+                     room_id: `${classNum}반`,
+                     group_id: currentGrade,
+                     class_num: classNum,
+                     day_of_week: day.name,
+                     period_start: p+1,
+                     duration: 1,
+                     isExternal: false
+                  });
+                }
+              }
+            }
+          }
+
+          setClassBlocks(newBlocks);
+          alert(`'${file.name}' 시간표 파일이 성공적으로 파싱되어 반영되었습니다!`);
+          navigate('/editor');
+
+        } catch (error) {
+          console.error("Excel parse error", error);
+          alert("엑셀 파일을 파싱하는 중 오류가 발생했습니다.");
+        }
+      };
+      reader.readAsArrayBuffer(file);
     }
     if (fileInputRef.current) {
       fileInputRef.current.value = '';

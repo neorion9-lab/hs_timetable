@@ -6,93 +6,13 @@ const TimetableEditor = () => {
   const { groups, classBlocks, setClassBlocks } = useTimetable();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  const handleAutoFill = () => {
-    const assignedGroup = groups.find(g => g.name === '배정 대상');
-    const assignedGrades = assignedGroup ? assignedGroup.memberGradeIds : [];
-
-    if (assignedGrades.length === 0) {
-      alert('배정 대상 학년이 없습니다. 먼저 그룹 관리에서 학년을 배정해주세요.');
-      return;
-    }
-
-    const newBlocks: any[] = [];
-    const classCounts: Record<string, number> = {
-      G1: 7, G2: 6, G3: 8, G4: 6, G5: 8, G6: 7
-    };
-    const subjects = ['국어', '수학', '사회', '과학', '영어', '체육', '음악', '미술', '실과', '도덕', '창체'];
-    const teachers = ['홍길동', '김철수', '이영희', '박민수', '최지우', '정우성'];
-
-    assignedGrades.forEach(gradeId => {
-      const numClasses = classCounts[gradeId] || 5;
-      for (let classNum = 1; classNum <= numClasses; classNum++) {
-        ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].forEach((day, d_idx) => {
-          // Randomize slightly for variety
-          const subIdx1 = (classNum * 3 + d_idx) % subjects.length;
-          const subIdx2 = (classNum * 2 + d_idx + 3) % subjects.length;
-          const subIdx3 = (classNum * 5 + d_idx + 1) % subjects.length;
-          
-          // Morning block (2 hours)
-          newBlocks.push({
-            block_id: `CB_AUTO_${gradeId}_${classNum}_${day}_1`,
-            year_id: "2026",
-            subject_id: subjects[subIdx1],
-            teacher_id: teachers[(classNum + d_idx) % teachers.length],
-            room_id: `본관 ${classNum}반`,
-            group_id: gradeId,
-            class_num: classNum,
-            day_of_week: day,
-            period_start: 1,
-            duration: 2,
-            isExternal: false,
-          });
-          
-          // Afternoon block 1 (1 hour)
-          newBlocks.push({
-            block_id: `CB_AUTO_${gradeId}_${classNum}_${day}_3`,
-            year_id: "2026",
-            subject_id: subjects[subIdx2],
-            teacher_id: teachers[(classNum + d_idx + 1) % teachers.length],
-            room_id: `특별실`,
-            group_id: gradeId,
-            class_num: classNum,
-            day_of_week: day,
-            period_start: 3,
-            duration: 1,
-            isExternal: d_idx % 2 === 0,
-          });
-          
-          // Afternoon block 2 (2 hours)
-          newBlocks.push({
-            block_id: `CB_AUTO_${gradeId}_${classNum}_${day}_4`,
-            year_id: "2026",
-            subject_id: subjects[subIdx3],
-            teacher_id: teachers[(classNum + d_idx + 2) % teachers.length],
-            room_id: `본관 ${classNum}반`,
-            group_id: gradeId,
-            class_num: classNum,
-            day_of_week: day,
-            period_start: 4,
-            duration: 2,
-            isExternal: false,
-          });
-        });
-      }
-    });
-
-    setClassBlocks(newBlocks);
-    alert('가상 과목 데이터가 전체 학년/반에 자동으로 채워졌습니다!');
-  };
-
   return (
     <div className="fade-in">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h1 className="page-title">시간표 템플릿 채우기 🪄</h1>
-          <p className="page-subtitle">템플릿을 적용하여 시간표를 자동으로 배정합니다.</p>
+          <p className="page-subtitle">불러온 시간표 파일의 내용이 자동으로 배치되었습니다.</p>
         </div>
-        <button className="btn" onClick={handleAutoFill}>
-          <Play size={18} /> 자동 채우기
-        </button>
       </div>
 
       <div className="card glass-panel" style={{ marginTop: '20px', padding: '20px', overflowX: 'auto' }}>
