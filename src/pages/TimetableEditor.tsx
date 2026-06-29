@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useTimetable } from '../context/TimetableContext';
-import { Play } from 'lucide-react';
+import { Play, MoreVertical } from 'lucide-react';
 
 const TimetableEditor = () => {
   const { groups, classBlocks } = useTimetable();
   const [selectedGroup, setSelectedGroup] = useState(groups[0]?.group_id || '');
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   return (
     <div className="fade-in">
@@ -52,8 +53,10 @@ const TimetableEditor = () => {
               {['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map(day => {
                 const block = classBlocks.find(b => b.group_id === selectedGroup && b.day_of_week === day && b.period_start <= period && b.period_start + b.duration > period);
                 
+                const cellId = `${period}-${day}`;
+                
                 return (
-                  <div key={`${period}-${day}`} style={{ 
+                  <div key={cellId} style={{ 
                     background: block ? (block.isExternal ? 'var(--primary-light)' : 'var(--secondary-color)') : 'white', 
                     border: '1px dashed #dcdde1',
                     borderRadius: '16px',
@@ -63,12 +66,48 @@ const TimetableEditor = () => {
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
+                    position: 'relative',
                     boxShadow: block ? '0 4px 10px rgba(0,0,0,0.05)' : 'none',
                     transition: 'all 0.2s',
                     cursor: 'pointer'
                   }}
-                  onClick={() => alert(`해당 항목은 ${block ? block.subject_id : '빈칸'} 입니다.`)}
+                  onClick={() => {
+                    if (activeDropdown) {
+                      setActiveDropdown(null);
+                    } else {
+                      alert(`해당 항목은 ${block ? block.subject_id : '빈칸'} 입니다.`);
+                    }
+                  }}
                   >
+                    <button 
+                      style={{ position: 'absolute', top: '8px', right: '8px', background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}
+                      onClick={(e) => { 
+                        e.stopPropagation(); 
+                        setActiveDropdown(activeDropdown === cellId ? null : cellId); 
+                      }}
+                    >
+                      <MoreVertical size={16} color="#718093" />
+                    </button>
+                    
+                    {activeDropdown === cellId && (
+                      <div style={{
+                        position: 'absolute',
+                        top: '30px',
+                        right: '8px',
+                        background: 'white',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                        borderRadius: '8px',
+                        padding: '5px',
+                        zIndex: 10,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        minWidth: '100px'
+                      }}>
+                        <button style={{ padding: '8px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.9rem', color: '#2f3640' }} onClick={(e) => { e.stopPropagation(); alert('과목 추가'); setActiveDropdown(null); }}>과목 추가</button>
+                        <button style={{ padding: '8px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.9rem', color: '#2f3640' }} onClick={(e) => { e.stopPropagation(); alert('과목 변경'); setActiveDropdown(null); }}>과목 변경</button>
+                        <button style={{ padding: '8px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.9rem', color: '#d63031' }} onClick={(e) => { e.stopPropagation(); alert('과목 삭제'); setActiveDropdown(null); }}>과목 삭제</button>
+                      </div>
+                    )}
                     {block ? (
                       <>
                         <strong style={{ fontSize: '1.1rem' }}>{block.subject_id}</strong>

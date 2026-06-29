@@ -18,7 +18,8 @@ const Dashboard = () => {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      alert(`'${file.name}' 파일이 성공적으로 업로드되었습니다. (MVP 기능)`);
+      alert(`'${file.name}' 시간표 파일이 성공적으로 업로드되었습니다.`);
+      navigate('/editor');
     }
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -34,7 +35,7 @@ const Dashboard = () => {
         <div className="card glass-panel">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
             <CalendarPlus size={24} color="var(--primary-color)" />
-            <h2 style={{ margin: 0 }}>현재 학사 연도</h2>
+            <h2 style={{ margin: 0 }}>시간표 만들기</h2>
           </div>
           <p style={{ fontSize: '1.2rem', color: 'var(--text-color)' }}><strong>{academicYears[0].label}</strong></p>
           <p>{academicYears[0].startDate} ~ {academicYears[0].endDate}</p>
@@ -45,9 +46,14 @@ const Dashboard = () => {
             accept=".xlsx,.xls,.csv,.json"
             onChange={handleFileChange} 
           />
-          <button className="btn" style={{ marginTop: '20px' }} onClick={handleUploadClick}>
-            <Sparkles size={18} /> 새 학사연도 만들기
-          </button>
+          <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+            <button className="btn" style={{ flex: 1 }} onClick={handleUploadClick}>
+              <Sparkles size={18} /> 시간표 불러오기
+            </button>
+            <button className="btn btn-secondary" style={{ flex: 1 }} onClick={() => navigate('/groups')}>
+              <Users size={18} /> 시간표 배정하기
+            </button>
+          </div>
         </div>
 
         <div className="card glass-panel">
