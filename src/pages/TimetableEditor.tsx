@@ -6,6 +6,17 @@ import type { ClassBlock } from '../data/mockData';
 const TimetableEditor = () => {
   const { groups, classBlocks, setClassBlocks } = useTimetable();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  // Modal state
+  const [modal, setModal] = useState<{
+    type: 'add' | 'change';
+    gradeId: string;
+    classNum: number;
+    day: string;
+    period: number;
+    currentSubject?: string;
+    blockId?: string;
+  } | null>(null);
+  const [inputSubject, setInputSubject] = useState('');
 
   const handleFileUpload = async (file: File) => {
     const assignedGroup = groups.find(g => g.name === '배정 대상');
@@ -90,7 +101,8 @@ const TimetableEditor = () => {
   };
 
   return (
-    <div className="fade-in">
+    <>
+      <div className="fade-in">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h1 className="page-title">시간표 템플릿 채우기 🪄</h1>
@@ -241,9 +253,36 @@ const TimetableEditor = () => {
                                     flexDirection: 'column',
                                     minWidth: '90px'
                                   }}>
-                                    <button style={{ padding: '6px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.8rem', color: '#2f3640' }} onClick={(e) => { e.stopPropagation(); alert('과목 추가'); setActiveDropdown(null); }}>과목 추가</button>
-                                    <button style={{ padding: '6px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.8rem', color: '#2f3640' }} onClick={(e) => { e.stopPropagation(); alert('과목 변경'); setActiveDropdown(null); }}>과목 변경</button>
-                                    <button style={{ padding: '6px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.8rem', color: '#d63031' }} onClick={(e) => { e.stopPropagation(); alert('과목 삭제'); setActiveDropdown(null); }}>과목 삭제</button>
+                                     <button style={{ padding: '6px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.8rem', color: '#2f3640' }}
+                                       onClick={(e) => {
+                                         e.stopPropagation();
+                                         setActiveDropdown(null);
+                                         setInputSubject('');
+                                         setModal({ type: 'add', gradeId, classNum, day, period });
+                                       }}>
+                                       수업 추가
+                                     </button>
+                                     <button style={{ padding: '6px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.8rem', color: '#d63031' }}
+                                       onClick={(e) => {
+                                         e.stopPropagation();
+                                         setActiveDropdown(null);
+                                         if (!block) { alert('삭제할 수업이 없습니다.'); return; }
+                                         if (window.confirm(`[${gradeId.replace('G','')}학년 ${classNum}반] ${day} ${period}교시 '${block.subject_id}' 수업을 삭제하시겠습니까?`)) {
+                                           setClassBlocks(prev => prev.filter(b => b.block_id !== block.block_id));
+                                         }
+                                       }}>
+                                       수업 삭제
+                                     </button>
+                                     <button style={{ padding: '6px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.8rem', color: '#2f3640' }}
+                                       onClick={(e) => {
+                                         e.stopPropagation();
+                                         setActiveDropdown(null);
+                                         if (!block) { alert('변경할 수업이 없습니다.'); return; }
+                                         setInputSubject(block.subject_id);
+                                         setModal({ type: 'change', gradeId, classNum, day, period, currentSubject: block.subject_id, blockId: block.block_id });
+                                       }}>
+                                       과목 변경
+                                     </button>
                                   </div>
                                 )}
                                 {block ? (
@@ -263,7 +302,76 @@ const TimetableEditor = () => {
         </div>
       </div>
     </div>
-  );
+
+    {/* Modal */}
+    {modal && (
+      <div style={{
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000
+      }} onClick={() => setModal(null)}>
+        <div style={{
+          background: 'white', borderRadius: '16px', padding: '32px',
+          minWidth: '340px', boxShadow: '0 20px 60px rgba(0,0,0,0.2)'
+        }} onClick={e => e.stopPropagation()}>
+          <h2 style={{ marginTop: 0, marginBottom: '8px', fontSize: '1.2rem' }}>
+            {modal.type === 'add' ? '수업 추가' : '과목 변경'}
+          </h2>
+          <p style={{ color: '#718093', fontSize: '0.9rem', marginBottom: '20px' }}>
+            {modal.gradeId.replace('G','')}학년 {modal.classNum}반&nbsp;|&nbsp;
+            {{Mon:'월',Tue:'화',Wed:'수',Thu:'목',Fri:'금'}[modal.day]} {modal.period}교시
+            {modal.type === 'change' && ` ▸ 현재: ${modal.currentSubject}`}
+          </p>
+          <label style={{ display: 'block', marginBottom: '6px', fontWeight: 600, fontSize: '0.9rem' }}>과목명</label>
+          <input
+            autoFocus
+            value={inputSubject}
+            onChange={e => setInputSubject(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                if (!inputSubject.trim()) return;
+                if (modal.type === 'add') {
+                  setClassBlocks(prev => [...prev, {
+                    block_id: `CB_MANUAL_${modal.gradeId}_${modal.classNum}_${modal.day}_${modal.period}_${Date.now()}`,
+                    year_id: '2026', subject_id: inputSubject.trim(),
+                    teacher_id: '담당', room_id: `${modal.classNum}반`,
+                    group_id: modal.gradeId, class_num: modal.classNum,
+                    day_of_week: modal.day, period_start: modal.period, duration: 1, isExternal: false
+                  }]);
+                } else {
+                  setClassBlocks(prev => prev.map(b => b.block_id === modal.blockId ? { ...b, subject_id: inputSubject.trim() } : b));
+                }
+                setModal(null);
+              }
+            }}
+            placeholder="과목명을 입력하세요"
+            style={{
+              width: '100%', padding: '10px 14px', borderRadius: '10px',
+              border: '1.5px solid #dcdde1', fontSize: '1rem',
+              outline: 'none', boxSizing: 'border-box', marginBottom: '20px'
+            }}
+          />
+          <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+            <button className="btn btn-secondary" style={{ padding: '8px 20px' }} onClick={() => setModal(null)}>취소</button>
+            <button className="btn" style={{ padding: '8px 20px' }} onClick={() => {
+              if (!inputSubject.trim()) return;
+              if (modal.type === 'add') {
+                setClassBlocks(prev => [...prev, {
+                  block_id: `CB_MANUAL_${modal.gradeId}_${modal.classNum}_${modal.day}_${modal.period}_${Date.now()}`,
+                  year_id: '2026', subject_id: inputSubject.trim(),
+                  teacher_id: '담당', room_id: `${modal.classNum}반`,
+                  group_id: modal.gradeId, class_num: modal.classNum,
+                  day_of_week: modal.day, period_start: modal.period, duration: 1, isExternal: false
+                }]);
+              } else {
+                setClassBlocks(prev => prev.map(b => b.block_id === modal.blockId ? { ...b, subject_id: inputSubject.trim() } : b));
+              }
+              setModal(null);
+            }}>{modal.type === 'add' ? '추가' : '변경'}</button>
+          </div>
+        </div>
+      </div>
+    )}
+  </>);
 };
 
 export default TimetableEditor;
