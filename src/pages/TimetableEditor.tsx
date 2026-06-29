@@ -102,35 +102,40 @@ const TimetableEditor = () => {
           borderRadius: '24px'
         }}>
           {/* Header */}
-          <div style={{ fontWeight: 'bold', textAlign: 'center', padding: '10px' }}>교시</div>
-          {['월', '화', '수', '목', '금'].map(day => (
-            <div key={day} style={{ fontWeight: 'bold', textAlign: 'center', padding: '10px' }}>{day}</div>
+          <div style={{ fontWeight: 'bold', textAlign: 'center', padding: '10px', gridColumn: 1, gridRow: 1 }}>교시</div>
+          {['월', '화', '수', '목', '금'].map((day, i) => (
+            <div key={day} style={{ fontWeight: 'bold', textAlign: 'center', padding: '10px', gridColumn: i + 2, gridRow: 1 }}>{day}</div>
           ))}
 
           {/* Slots */}
           {[1, 2, 3, 4, 5, 6].map(period => (
             <React.Fragment key={period}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#718093' }}>{period}교시</div>
-              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map(day => {
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: '#718093', gridColumn: 1, gridRow: period + 1 }}>{period}교시</div>
+              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].map((day, dayIndex) => {
                 const block = classBlocks.find(b => b.group_id === selectedGroup && b.day_of_week === day && b.period_start <= period && b.period_start + b.duration > period);
                 
+                if (block && block.period_start < period) return null;
+
                 const cellId = `${period}-${day}`;
                 
                 return (
                   <div key={cellId} style={{ 
+                    gridColumn: dayIndex + 2,
+                    gridRow: block ? `${period + 1} / span ${block.duration}` : `${period + 1} / span 1`,
                     background: block ? (block.isExternal ? 'var(--primary-light)' : 'var(--secondary-color)') : 'white', 
                     border: '1px dashed #dcdde1',
                     borderRadius: '16px',
                     padding: '15px',
                     textAlign: 'center',
-                    minHeight: '90px',
+                    minHeight: block ? `${90 * block.duration + 10 * (block.duration - 1)}px` : '90px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
                     position: 'relative',
                     boxShadow: block ? '0 4px 10px rgba(0,0,0,0.05)' : 'none',
                     transition: 'all 0.2s',
-                    cursor: 'pointer'
+                    cursor: 'pointer',
+                    zIndex: block ? 5 : 1
                   }}
                   onClick={() => {
                     if (activeDropdown) {
