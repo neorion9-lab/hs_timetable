@@ -1,10 +1,93 @@
 import React, { useState } from 'react';
 import { useTimetable } from '../context/TimetableContext';
-import { MoreVertical } from 'lucide-react';
+import { MoreVertical, FolderOpen, Wand2 } from 'lucide-react';
+import type { ClassBlock } from '../data/mockData';
 
 const TimetableEditor = () => {
-  const { groups, classBlocks } = useTimetable();
+  const { groups, classBlocks, setClassBlocks } = useTimetable();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+
+  const handleFileUpload = async (file: File) => {
+    const assignedGroup = groups.find(g => g.name === '배정 대상');
+    const assignedGrades = assignedGroup ? assignedGroup.memberGradeIds : [];
+    if (assignedGrades.length === 0) {
+      alert('그룹 관리에서 배정 대상 학년을 먼저 설정해주세요.');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const data = new Uint8Array(e.target?.result as ArrayBuffer);
+        const XLSX = await import('xlsx');
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 }) as any[][];
+        const newBlocks: ClassBlock[] = [];
+        const abbr: Record<string, string> = {
+          '국': '국어', '수': '수학', '통': '통합', '창': '창체',
+          '영': '영어', '사': '사회', '과': '과학', '체': '체육',
+          '음': '음악', '미': '미술', '실': '실과', '도': '도덕'
+        };
+        const days = [
+          { name: 'Mon', start: 2, periods: 6 },
+          { name: 'Tue', start: 8, periods: 6 },
+          { name: 'Wed', start: 14, periods: 5 },
+          { name: 'Thu', start: 19, periods: 6 },
+          { name: 'Fri', start: 25, periods: 6 }
+        ];
+        let currentGrade = '';
+        for (let r = 2; r < jsonData.length; r++) {
+          const row = jsonData[r];
+          if (!row || row.length === 0) continue;
+          if (row[0]) {
+            const m = row[0].toString().match(/(\d)/);
+            if (m) currentGrade = `G${m[1]}`;
+          }
+          if (!currentGrade || !assignedGrades.includes(currentGrade)) continue;
+          const classStr = row[1];
+          if (!classStr || typeof classStr !== 'string' || !classStr.includes('반')) continue;
+          const classNum = parseInt(classStr.replace('반', ''));
+          for (const day of days) {
+            for (let p = 0; p < day.periods; p++) {
+              const val = row[day.start + p]?.toString().trim();
+              if (val) {
+                newBlocks.push({
+                  block_id: `CB_EXCEL_${currentGrade}_${classNum}_${day.name}_${p + 1}`,
+                  year_id: '2026',
+                  subject_id: abbr[val] ?? val,
+                  teacher_id: '담당',
+                  room_id: `${classNum}반`,
+                  group_id: currentGrade,
+                  class_num: classNum,
+                  day_of_week: day.name,
+                  period_start: p + 1,
+                  duration: 1,
+                  isExternal: false,
+                });
+              }
+            }
+          }
+        }
+        setClassBlocks(newBlocks);
+        alert(`'${file.name}' 시간표가 성공적으로 불러와졌습니다!`);
+      } catch (err) {
+        alert('파일 파싱 중 오류가 발생했습니다.');
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  };
+
+  const openFilePicker = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.xlsx,.xls,.csv';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) handleFileUpload(file);
+    };
+    input.click();
+  };
 
   return (
     <div className="fade-in">
@@ -12,6 +95,14 @@ const TimetableEditor = () => {
         <div>
           <h1 className="page-title">시간표 템플릿 채우기 🪄</h1>
           <p className="page-subtitle">불러온 시간표 파일의 내용이 자동으로 배치되었습니다.</p>
+        </div>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button className="btn btn-secondary" onClick={() => openFilePicker()}>
+            <FolderOpen size={18} /> 새 일정 불러오기
+          </button>
+          <button className="btn" onClick={() => openFilePicker()}>
+            <Wand2 size={18} /> 자동배정하기
+          </button>
         </div>
       </div>
 
@@ -156,14 +247,8 @@ const TimetableEditor = () => {
                                   </div>
                                 )}
                                 {block ? (
-                                  <>
-                                    <strong style={{ fontSize: '0.85rem' }}>{block.subject_id}</strong>
-                                    <span style={{ fontSize: '0.7rem', color: 'rgba(0,0,0,0.6)' }}>교사: {block.teacher_id}</span>
-                                    {block.isExternal && <span style={{ fontSize: '0.65rem', color: '#d63031', marginTop: '2px', fontWeight: 'bold' }}>외부 강사</span>}
-                                  </>
-                                ) : (
-                                  <span style={{ color: '#ecf0f1', fontSize: '0.8rem' }}></span>
-                                )}
+                                  <strong style={{ fontSize: '0.85rem' }}>{block.subject_id}</strong>
+                                ) : null}
                               </div>
                             )
                           })
