@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useTimetable } from '../context/TimetableContext';
-import { Play, MoreVertical } from 'lucide-react';
+import { MoreVertical } from 'lucide-react';
 
 const TimetableEditor = () => {
-  const { groups, classBlocks, setClassBlocks } = useTimetable();
+  const { groups, classBlocks } = useTimetable();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   return (
