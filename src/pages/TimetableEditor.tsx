@@ -6,77 +6,15 @@ const TimetableEditor = () => {
   const { groups, classBlocks, setClassBlocks } = useTimetable();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
-  const handleAutoFill = () => {
-    const assignedGroup = groups.find(g => g.name === '배정 대상');
-    const assignedGrades = assignedGroup ? assignedGroup.memberGradeIds : [];
 
-    if (assignedGrades.length === 0) {
-      alert('배정 대상 학년이 없습니다. 먼저 그룹 관리에서 학년을 배정해주세요.');
-      return;
-    }
-
-    const newBlocks: typeof classBlocks = [];
-    
-    assignedGrades.forEach(gradeId => {
-      // Add a couple of blocks for 1반
-      newBlocks.push({
-        block_id: `CB_AUTO_${gradeId}_1_1`,
-        year_id: "2026",
-        subject_id: "국어 (불러옴)",
-        teacher_id: "T101",
-        room_id: "R101",
-        group_id: gradeId,
-        class_num: 1,
-        day_of_week: "Mon",
-        period_start: 3,
-        duration: 1,
-        isExternal: false,
-      });
-      newBlocks.push({
-        block_id: `CB_AUTO_${gradeId}_1_2`,
-        year_id: "2026",
-        subject_id: "수학 (불러옴)",
-        teacher_id: "T102",
-        room_id: "R102",
-        group_id: gradeId,
-        class_num: 1,
-        day_of_week: "Wed",
-        period_start: 2,
-        duration: 2,
-        isExternal: false,
-      });
-      
-      // Add a couple of blocks for 2반
-      newBlocks.push({
-        block_id: `CB_AUTO_${gradeId}_2_1`,
-        year_id: "2026",
-        subject_id: "영어 (불러옴)",
-        teacher_id: "T103",
-        room_id: "R103",
-        group_id: gradeId,
-        class_num: 2,
-        day_of_week: "Tue",
-        period_start: 1,
-        duration: 2,
-        isExternal: false,
-      });
-    });
-
-    setClassBlocks(newBlocks);
-    
-    alert('시간표 불러오기에서 가져온 과목들이 자동으로 채워졌습니다!');
-  };
 
   return (
     <div className="fade-in">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h1 className="page-title">시간표 템플릿 채우기 🪄</h1>
-          <p className="page-subtitle">템플릿을 적용하여 시간표를 자동으로 배정합니다.</p>
+          <p className="page-subtitle">불러온 시간표 파일의 내용이 자동으로 배치되었습니다.</p>
         </div>
-        <button className="btn" onClick={handleAutoFill}>
-          <Play size={18} /> 자동 채우기
-        </button>
       </div>
 
       <div className="card glass-panel" style={{ marginTop: '20px', padding: '20px', overflowX: 'auto' }}>
