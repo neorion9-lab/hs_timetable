@@ -5,6 +5,7 @@ import Dashboard from './pages/Dashboard';
 import GroupManager from './pages/GroupManager';
 import TimetableEditor from './pages/TimetableEditor';
 import YearCompare from './pages/YearCompare';
+import Footer from './components/Footer';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="/editor" element={<TimetableEditor />} />
           <Route path="/compare" element={<YearCompare />} />
         </Routes>
+        <Footer />
       </main>
     </div>
   );
