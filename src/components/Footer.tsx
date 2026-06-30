@@ -105,6 +105,7 @@ const PRIVACY_CONTENT = (
       <thead><tr><th>항목</th><th>내용</th></tr></thead>
       <tbody>
         <tr><td>담당자 직책</td><td>교사</td></tr>
+        <tr><td>담당자</td><td>이현실</td></tr>
         <tr><td>연락 방법</td><td>개원초 교무실 02-2138-1940</td></tr>
       </tbody>
     </table>
