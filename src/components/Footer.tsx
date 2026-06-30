@@ -104,8 +104,8 @@ const PRIVACY_CONTENT = (
     <table>
       <thead><tr><th>항목</th><th>내용</th></tr></thead>
       <tbody>
-        <tr><td>담당자 직책</td><td>학교 IT 관리자 / 행정실장</td></tr>
-        <tr><td>연락 방법</td><td>학교 내부망 메신저 또는 행정실 직통 연락처</td></tr>
+        <tr><td>담당자 직책</td><td>교사</td></tr>
+        <tr><td>연락 방법</td><td>개원초 교무실 02-2138-1940</td></tr>
       </tbody>
     </table>
     <p>외부 기관에 신고하려면 아래를 이용하실 수 있습니다.</p>
@@ -383,7 +383,7 @@ const Footer = () => {
           {/* 정보관리책임자 */}
           <div className="footer-manager">
             <User size={13} />
-            <span>정보관리책임자: 학교 IT 관리자</span>
+            <span>정보관리책임자: 이현실</span>
           </div>
 
           {/* 카피라이트 */}
