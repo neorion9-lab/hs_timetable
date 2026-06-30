@@ -20,11 +20,9 @@ const TimetableEditor = () => {
 
   const handleFileUpload = async (file: File) => {
     const assignedGroup = groups.find(g => g.name === '배정 대상');
-    const assignedGrades = assignedGroup ? assignedGroup.memberGradeIds : [];
-    if (assignedGrades.length === 0) {
-      alert('그룹 관리에서 배정 대상 학년을 먼저 설정해주세요.');
-      return;
-    }
+    const assignedGrades = assignedGroup && assignedGroup.memberGradeIds.length > 0
+      ? assignedGroup.memberGradeIds
+      : ['G1', 'G2', 'G3', 'G4', 'G5', 'G6'];
     const reader = new FileReader();
     reader.onload = async (e) => {
       try {
@@ -148,7 +146,9 @@ const TimetableEditor = () => {
           {/* Slots per Grade and Class */}
           {(() => {
             const assignedGroup = groups.find(g => g.name === '배정 대상');
-            const assignedGrades = assignedGroup ? assignedGroup.memberGradeIds : [];
+            const assignedGrades = assignedGroup && assignedGroup.memberGradeIds.length > 0
+              ? assignedGroup.memberGradeIds
+              : ['G1', 'G2', 'G3', 'G4', 'G5', 'G6'];
             
             const classCounts: Record<string, number> = {
               G1: 7,

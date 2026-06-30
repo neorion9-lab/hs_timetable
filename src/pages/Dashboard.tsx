@@ -19,13 +19,9 @@ const Dashboard = () => {
     const file = e.target.files?.[0];
     if (file) {
       const assignedGroup = groups.find(g => g.name === '배정 대상');
-      const assignedGrades = assignedGroup ? assignedGroup.memberGradeIds : [];
-
-      if (assignedGrades.length === 0) {
-        alert('그룹 관리에서 배정 대상 학년을 먼저 설정해야 시간표가 생성됩니다.');
-        if (fileInputRef.current) fileInputRef.current.value = '';
-        return;
-      }
+      const assignedGrades = assignedGroup && assignedGroup.memberGradeIds.length > 0
+        ? assignedGroup.memberGradeIds
+        : ['G1', 'G2', 'G3', 'G4', 'G5', 'G6'];
 
       const reader = new FileReader();
       reader.onload = async (e) => {
