@@ -6,6 +6,14 @@ import type { ClassBlock } from '../data/mockData';
 const TimetableEditor = () => {
   const { groups, classBlocks, setClassBlocks } = useTimetable();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null);
+  const [dropdownInfo, setDropdownInfo] = useState<{
+    gradeId: string;
+    classNum: number;
+    day: string;
+    period: number;
+    block: ClassBlock | undefined;
+  } | null>(null);
   // Modal state
   const [modal, setModal] = useState<{
     type: 'add' | 'change';
@@ -17,6 +25,12 @@ const TimetableEditor = () => {
     blockId?: string;
   } | null>(null);
   const [inputSubject, setInputSubject] = useState('');
+
+  const closeDropdown = () => {
+    setActiveDropdown(null);
+    setDropdownPos(null);
+    setDropdownInfo(null);
+  };
 
   const handleFileUpload = async (file: File) => {
     const assignedGroup = groups.find(g => g.name === '배정 대상');
@@ -221,70 +235,25 @@ const TimetableEditor = () => {
                                 zIndex: block ? 5 : 1,
                                 borderRight: period === 6 && d_index < 4 ? '2px solid #dcdde1' : '1px solid #eee'
                               }}
-                              onClick={() => {
-                                if (activeDropdown) {
-                                  setActiveDropdown(null);
-                                } else {
-                                  alert(`해당 항목은 ${block ? block.subject_id : '빈칸'} 입니다.`);
-                                }
-                              }}
+                              onClick={() => { if (activeDropdown) closeDropdown(); }}
                               >
                                 <button 
-                                  style={{ position: 'absolute', top: '2px', right: '2px', background: 'none', border: 'none', cursor: 'pointer', padding: '2px' }}
+                                  style={{ position: 'absolute', top: '2px', right: '2px', background: 'none', border: 'none', cursor: 'pointer', padding: '2px', zIndex: 2 }}
                                   onClick={(e) => { 
-                                    e.stopPropagation(); 
-                                    setActiveDropdown(activeDropdown === cellId ? null : cellId); 
+                                    e.stopPropagation();
+                                    if (activeDropdown === cellId) {
+                                      closeDropdown();
+                                    } else {
+                                      const rect = e.currentTarget.getBoundingClientRect();
+                                      setDropdownPos({ top: rect.bottom + 4, left: rect.right - 100 });
+                                      setDropdownInfo({ gradeId, classNum, day, period, block });
+                                      setActiveDropdown(cellId);
+                                    }
                                   }}
                                 >
                                   <MoreVertical size={14} color="#718093" />
                                 </button>
                                 
-                                {activeDropdown === cellId && (
-                                  <div style={{
-                                    position: 'absolute',
-                                    top: '20px',
-                                    right: '2px',
-                                    background: 'white',
-                                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                                    borderRadius: '8px',
-                                    padding: '5px',
-                                    zIndex: 10,
-                                    display: 'flex',
-                                    flexDirection: 'column',
-                                    minWidth: '90px'
-                                  }}>
-                                     <button style={{ padding: '6px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.8rem', color: '#2f3640' }}
-                                       onClick={(e) => {
-                                         e.stopPropagation();
-                                         setActiveDropdown(null);
-                                         setInputSubject('');
-                                         setModal({ type: 'add', gradeId, classNum, day, period });
-                                       }}>
-                                       수업 추가
-                                     </button>
-                                     <button style={{ padding: '6px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.8rem', color: '#d63031' }}
-                                       onClick={(e) => {
-                                         e.stopPropagation();
-                                         setActiveDropdown(null);
-                                         if (!block) { alert('삭제할 수업이 없습니다.'); return; }
-                                         if (window.confirm(`[${gradeId.replace('G','')}학년 ${classNum}반] ${day} ${period}교시 '${block.subject_id}' 수업을 삭제하시겠습니까?`)) {
-                                           setClassBlocks(prev => prev.filter(b => b.block_id !== block.block_id));
-                                         }
-                                       }}>
-                                       수업 삭제
-                                     </button>
-                                     <button style={{ padding: '6px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.8rem', color: '#2f3640' }}
-                                       onClick={(e) => {
-                                         e.stopPropagation();
-                                         setActiveDropdown(null);
-                                         if (!block) { alert('변경할 수업이 없습니다.'); return; }
-                                         setInputSubject(block.subject_id);
-                                         setModal({ type: 'change', gradeId, classNum, day, period, currentSubject: block.subject_id, blockId: block.block_id });
-                                       }}>
-                                       과목 변경
-                                     </button>
-                                  </div>
-                                )}
                                 {block ? (
                                   <strong style={{ fontSize: '0.85rem' }}>{block.subject_id}</strong>
                                 ) : null}
@@ -302,6 +271,74 @@ const TimetableEditor = () => {
         </div>
       </div>
     </div>
+
+    {/* Dropdown Menu (fixed positioned to avoid clipping) */}
+    {activeDropdown && dropdownPos && dropdownInfo && (
+      <>
+        {/* Invisible overlay to close on outside click */}
+        <div
+          style={{ position: 'fixed', inset: 0, zIndex: 9998 }}
+          onClick={closeDropdown}
+        />
+        <div
+          style={{
+            position: 'fixed',
+            top: dropdownPos.top,
+            left: dropdownPos.left,
+            background: 'white',
+            boxShadow: '0 6px 20px rgba(0,0,0,0.15)',
+            borderRadius: '10px',
+            padding: '6px',
+            zIndex: 9999,
+            display: 'flex',
+            flexDirection: 'column',
+            minWidth: '100px',
+            border: '1px solid #eee'
+          }}
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button
+            style={{ padding: '7px 10px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.82rem', color: '#2f3640', borderRadius: '6px' }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#f1f2f6')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+            onClick={() => {
+              closeDropdown();
+              setInputSubject('');
+              setModal({ type: 'add', gradeId: dropdownInfo.gradeId, classNum: dropdownInfo.classNum, day: dropdownInfo.day, period: dropdownInfo.period });
+            }}
+          >
+            ➕ 수업 추가
+          </button>
+          <button
+            style={{ padding: '7px 10px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.82rem', color: '#d63031', borderRadius: '6px' }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#fff5f5')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+            onClick={() => {
+              if (!dropdownInfo.block) { alert('삭제할 수업이 없습니다.'); closeDropdown(); return; }
+              if (window.confirm(`[${dropdownInfo.gradeId.replace('G','')}학년 ${dropdownInfo.classNum}반] ${{ Mon:'월',Tue:'화',Wed:'수',Thu:'목',Fri:'금' }[dropdownInfo.day as 'Mon']} ${dropdownInfo.period}교시 '${dropdownInfo.block.subject_id}' 수업을 삭제하시겠습니까?`)) {
+                setClassBlocks(prev => prev.filter(b => b.block_id !== dropdownInfo.block!.block_id));
+              }
+              closeDropdown();
+            }}
+          >
+            🗑 수업 삭제
+          </button>
+          <button
+            style={{ padding: '7px 10px', textAlign: 'left', background: 'none', border: 'none', width: '100%', cursor: 'pointer', fontSize: '0.82rem', color: '#2f3640', borderRadius: '6px' }}
+            onMouseEnter={e => (e.currentTarget.style.background = '#f1f2f6')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'none')}
+            onClick={() => {
+              if (!dropdownInfo.block) { alert('변경할 수업이 없습니다.'); closeDropdown(); return; }
+              setInputSubject(dropdownInfo.block.subject_id);
+              setModal({ type: 'change', gradeId: dropdownInfo.gradeId, classNum: dropdownInfo.classNum, day: dropdownInfo.day, period: dropdownInfo.period, currentSubject: dropdownInfo.block.subject_id, blockId: dropdownInfo.block.block_id });
+              closeDropdown();
+            }}
+          >
+            ✏️ 과목 변경
+          </button>
+        </div>
+      </>
+    )}
 
     {/* Modal */}
     {modal && (
