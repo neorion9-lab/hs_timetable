@@ -542,9 +542,27 @@ const TimetableEditor = () => {
             style={{
               width: '100%', padding: '10px 14px', borderRadius: '10px',
               border: '1.5px solid #dcdde1', fontSize: '1rem',
-              outline: 'none', boxSizing: 'border-box', marginBottom: '20px'
+              outline: 'none', boxSizing: 'border-box', marginBottom: '15px'
             }}
           />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '8px', marginBottom: '20px' }}>
+            {['국어', '도덕', '사회', '수학', '과학', '체육', '음악', '미술', '실과', '영어', '통합', '창체'].map(sub => (
+              <button
+                key={sub}
+                onClick={() => setInputSubject(sub)}
+                style={{
+                  padding: '8px', borderRadius: '8px', 
+                  border: inputSubject === sub ? '2px solid var(--primary-color)' : '1px solid #dcdde1',
+                  background: inputSubject === sub ? 'var(--primary-light)' : 'white', 
+                  cursor: 'pointer', fontSize: '0.9rem', color: '#2f3640', 
+                  fontWeight: inputSubject === sub ? 'bold' : 'normal',
+                  transition: 'all 0.1s'
+                }}
+              >
+                {sub}
+              </button>
+            ))}
+          </div>
           <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
             <button className="btn btn-secondary" style={{ padding: '8px 20px' }} onClick={() => setModal(null)}>취소</button>
             <button className="btn" style={{ padding: '8px 20px' }} onClick={() => {
