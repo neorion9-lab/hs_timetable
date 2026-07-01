@@ -272,7 +272,7 @@ const TimetableEditor = () => {
         )}
       </div>
 
-      <div className="card glass-panel" style={{ marginTop: '20px', padding: '20px', overflowX: 'auto' }}>
+      <div className="glass-panel" style={{ marginTop: '20px', padding: '20px', overflowX: 'auto' }}>
         <div style={{ 
           display: 'grid', 
           gridTemplateColumns: '50px 50px repeat(30, minmax(55px, 1fr))', 
