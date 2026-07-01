@@ -31,6 +31,7 @@ const TimetableEditor = () => {
   const [autoFillGrade, setAutoFillGrade] = useState('G1');
   const [autoFillClassCount, setAutoFillClassCount] = useState(7);
   const [autoFillHours, setAutoFillHours] = useState(1);
+  const [consecutiveHours, setConsecutiveHours] = useState(1);
   const [allowOverlap, setAllowOverlap] = useState(false);
   const [autoFillResult, setAutoFillResult] = useState<string | null>(null);
   const [lastClassBlocks, setLastClassBlocks] = useState<ClassBlock[] | null>(null);
@@ -70,47 +71,64 @@ const TimetableEditor = () => {
       outer: for (const day of DAYS) {
         for (let period = 1; period <= day.maxPeriod; period++) {
           if (assignedForClass >= autoFillHours) break outer;
-          if (isBlockedSlot(autoFillGrade, day.key, period)) continue;
-          // Check if this slot is already occupied
-          const occupied = [...classBlocks, ...newBlocks].some(
-            b =>
-              b.group_id === autoFillGrade &&
-              b.class_num === classNum &&
-              b.day_of_week === day.key &&
-              b.period_start <= period &&
-              b.period_start + b.duration > period
-          );
-          if (occupied) continue;
+          
+          // Check if the block exceeds max periods
+          if (period + consecutiveHours - 1 > day.maxPeriod) continue;
 
-          // Check if same subject is already assigned at the same time in another class (if overlap is not allowed)
-          if (!allowOverlap) {
-            const subjectOverlap = [...classBlocks, ...newBlocks].some(
+          let canAssign = true;
+          for (let p = period; p < period + consecutiveHours; p++) {
+            if (isBlockedSlot(autoFillGrade, day.key, p)) {
+              canAssign = false;
+              break;
+            }
+
+            const occupied = [...classBlocks, ...newBlocks].some(
               b =>
                 b.group_id === autoFillGrade &&
-                b.subject_id === autoFillSubject.trim() &&
+                b.class_num === classNum &&
                 b.day_of_week === day.key &&
-                b.period_start <= period &&
-                b.period_start + b.duration > period
+                b.period_start <= p &&
+                b.period_start + b.duration > p
             );
-            if (subjectOverlap) continue;
+            if (occupied) {
+              canAssign = false;
+              break;
+            }
+
+            if (!allowOverlap) {
+              const subjectOverlap = [...classBlocks, ...newBlocks].some(
+                b =>
+                  b.group_id === autoFillGrade &&
+                  b.subject_id === autoFillSubject.trim() &&
+                  b.day_of_week === day.key &&
+                  b.period_start <= p &&
+                  b.period_start + b.duration > p
+              );
+              if (subjectOverlap) {
+                canAssign = false;
+                break;
+              }
+            }
           }
 
+          if (!canAssign) continue;
+
           newBlocks.push({
-              block_id: `CB_AUTO_${autoFillGrade}_${classNum}_${day.key}_${period}_${Date.now()}_${Math.random()}`,
-              year_id: '2026',
-              subject_id: autoFillSubject.trim(),
-              teacher_id: '담당',
-              room_id: `${classNum}반`,
-              group_id: autoFillGrade,
-              class_num: classNum,
-              day_of_week: day.key,
-              period_start: period,
-              duration: 1,
-              isExternal: false,
-            });
-            assignedForClass++;
-            totalAssigned++;
-          }
+            block_id: `CB_AUTO_${autoFillGrade}_${classNum}_${day.key}_${period}_${Date.now()}_${Math.random()}`,
+            year_id: '2026',
+            subject_id: autoFillSubject.trim(),
+            teacher_id: '담당',
+            room_id: `${classNum}반`,
+            group_id: autoFillGrade,
+            class_num: classNum,
+            day_of_week: day.key,
+            period_start: period,
+            duration: consecutiveHours,
+            isExternal: false,
+          });
+          assignedForClass += consecutiveHours;
+          totalAssigned += consecutiveHours;
+          period += consecutiveHours - 1; // Skip the next period(s) in the loop since we assigned them
         }
       }
 
@@ -298,7 +316,19 @@ const TimetableEditor = () => {
             />
             <span className="autofill-unit">시간</span>
           </div>
-          <div className="autofill-field" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div className="autofill-field">
+              <label>연속 차시</label>
+              <select
+                value={consecutiveHours}
+                onChange={e => setConsecutiveHours(Number(e.target.value))}
+                className="autofill-select"
+                style={{ width: '100px' }}
+              >
+                <option value={1}>1차시씩</option>
+                <option value={2}>2차시 연속</option>
+              </select>
+            </div>
+            <div className="autofill-field" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <label style={{ visibility: 'hidden' }}>배정</label>
             <div style={{ display: 'flex', gap: '8px' }}>
               <button className="btn btn-primary" onClick={handleAutoFill}>
