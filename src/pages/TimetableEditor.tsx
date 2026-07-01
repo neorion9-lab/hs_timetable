@@ -33,6 +33,7 @@ const TimetableEditor = () => {
   const [autoFillHours, setAutoFillHours] = useState(1);
   const [allowOverlap, setAllowOverlap] = useState(false);
   const [autoFillResult, setAutoFillResult] = useState<string | null>(null);
+  const [lastClassBlocks, setLastClassBlocks] = useState<ClassBlock[] | null>(null);
 
   const DAYS: { key: string; label: string; maxPeriod: number }[] = [
     { key: 'Mon', label: '월', maxPeriod: 6 },
@@ -122,6 +123,10 @@ const TimetableEditor = () => {
       setAutoFillResult('❌ 배정할 수 있는 빈 슬롯이 없습니다.');
       return;
     }
+    
+    // Save current state before applying new blocks for Undo functionality
+    setLastClassBlocks([...classBlocks]);
+    
     setClassBlocks(prev => [...prev, ...newBlocks]);
     const gradeLabel = autoFillGrade.replace('G', '') + '학년';
     let msg = `✅ ${gradeLabel} ${autoFillClassCount}개 학급에 "${autoFillSubject.trim()}" 총 ${totalAssigned}시간 배정 완료!`;
@@ -129,6 +134,13 @@ const TimetableEditor = () => {
       msg += ` (${skippedClasses.join(', ')} 빈 슬롯 부족으로 일부 미배정)`;
     }
     setAutoFillResult(msg);
+  };
+
+  const handleUndoAutoFill = () => {
+    if (!lastClassBlocks) return;
+    setClassBlocks(lastClassBlocks);
+    setLastClassBlocks(null);
+    setAutoFillResult('⏪ 자동 배정이 이전 상태로 되돌려졌습니다.');
   };
 
   const closeDropdown = () => {
@@ -288,9 +300,20 @@ const TimetableEditor = () => {
           </div>
           <div className="autofill-field" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <label style={{ visibility: 'hidden' }}>배정</label>
-            <button className="btn btn-primary" onClick={handleAutoFill}>
-              <Sparkles size={18} /> 자동 배정
-            </button>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button className="btn btn-primary" onClick={handleAutoFill}>
+                <Sparkles size={18} /> 자동 배정
+              </button>
+              {lastClassBlocks && (
+                <button 
+                  className="btn btn-secondary" 
+                  onClick={handleUndoAutoFill}
+                  style={{ background: '#f1f2f6', color: '#2f3640', border: '1px solid #dcdde1' }}
+                >
+                  ⏪ 되돌리기
+                </button>
+              )}
+            </div>
           </div>
         </div>
         <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}>
