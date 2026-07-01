@@ -31,6 +31,7 @@ const TimetableEditor = () => {
   const [autoFillGrade, setAutoFillGrade] = useState('G1');
   const [autoFillClassCount, setAutoFillClassCount] = useState(7);
   const [autoFillHours, setAutoFillHours] = useState(1);
+  const [allowOverlap, setAllowOverlap] = useState(false);
   const [autoFillResult, setAutoFillResult] = useState<string | null>(null);
 
   const DAYS: { key: string; label: string; maxPeriod: number }[] = [
@@ -78,8 +79,22 @@ const TimetableEditor = () => {
               b.period_start <= period &&
               b.period_start + b.duration > period
           );
-          if (!occupied) {
-            newBlocks.push({
+          if (occupied) continue;
+
+          // Check if same subject is already assigned at the same time in another class (if overlap is not allowed)
+          if (!allowOverlap) {
+            const subjectOverlap = [...classBlocks, ...newBlocks].some(
+              b =>
+                b.group_id === autoFillGrade &&
+                b.subject_id === autoFillSubject.trim() &&
+                b.day_of_week === day.key &&
+                b.period_start <= period &&
+                b.period_start + b.duration > period
+            );
+            if (subjectOverlap) continue;
+          }
+
+          newBlocks.push({
               block_id: `CB_AUTO_${autoFillGrade}_${classNum}_${day.key}_${period}_${Date.now()}_${Math.random()}`,
               year_id: '2026',
               subject_id: autoFillSubject.trim(),
@@ -271,9 +286,23 @@ const TimetableEditor = () => {
             />
             <span className="autofill-unit">시간</span>
           </div>
-          <button className="btn autofill-btn" onClick={handleAutoFill}>
-            <Sparkles size={16} /> 자동 배정
-          </button>
+          <div className="autofill-field" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+            <label style={{ visibility: 'hidden' }}>배정</label>
+            <button className="btn btn-primary" onClick={handleAutoFill}>
+              <Sparkles size={18} /> 자동 배정
+            </button>
+          </div>
+        </div>
+        <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}>
+          <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', fontSize: '0.9rem', color: '#2f3640' }}>
+            <input 
+              type="checkbox" 
+              checked={allowOverlap} 
+              onChange={e => setAllowOverlap(e.target.checked)} 
+              style={{ marginRight: '8px', cursor: 'pointer', width: '16px', height: '16px' }}
+            />
+            같은 시간 배정 허용 <span style={{ color: '#7f8fa6', marginLeft: '6px', fontSize: '0.8rem' }}>(체크 해제 시 강사 1명으로 간주하여 다른 반과 겹치지 않게 배정)</span>
+          </label>
         </div>
         {autoFillResult && (
           <div className={`autofill-result ${autoFillResult.startsWith('✅') ? 'autofill-result-ok' : 'autofill-result-err'}`}>
