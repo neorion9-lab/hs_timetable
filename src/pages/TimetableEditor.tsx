@@ -41,6 +41,18 @@ const TimetableEditor = () => {
     { key: 'Fri', label: '금', maxPeriod: 6 },
   ];
 
+  const isBlockedSlot = (gradeId: string, day: string, period: number) => {
+    if (gradeId === 'G1' || gradeId === 'G2') {
+      if ((day === 'Mon' || day === 'Wed') && period >= 5) return true;
+      if ((day === 'Tue' || day === 'Thu' || day === 'Fri') && period >= 6) return true;
+    } else if (gradeId === 'G3' || gradeId === 'G4') {
+      if ((day === 'Mon' || day === 'Wed' || day === 'Thu' || day === 'Fri') && period >= 6) return true;
+    } else if (gradeId === 'G5' || gradeId === 'G6') {
+      if (day === 'Wed' && period >= 6) return true;
+    }
+    return false;
+  };
+
   const handleAutoFill = () => {
     if (!autoFillSubject.trim()) {
       setAutoFillResult('⚠️ 과목명을 입력해 주세요.');
@@ -56,6 +68,7 @@ const TimetableEditor = () => {
       outer: for (const day of DAYS) {
         for (let period = 1; period <= day.maxPeriod; period++) {
           if (assignedForClass >= autoFillHours) break outer;
+          if (isBlockedSlot(autoFillGrade, day.key, period)) continue;
           // Check if this slot is already occupied
           const occupied = [...classBlocks, ...newBlocks].some(
             b =>
@@ -357,12 +370,13 @@ const TimetableEditor = () => {
 
                             const colIdx = 2 + (d_index * 6) + period;
                             const cellId = `${gradeId}-${classNum}-${day}-${period}`;
+                            const isBlocked = isBlockedSlot(gradeId, day, period);
                             
                             return (
                               <div key={cellId} style={{ 
                                 gridColumn: block ? `${colIdx} / span ${block.duration}` : `${colIdx} / span 1`,
                                 gridRow: rowIdx,
-                                background: block ? (block.isExternal ? 'var(--primary-light)' : 'var(--secondary-color)') : 'white', 
+                                background: isBlocked ? 'repeating-linear-gradient(45deg, #f5f6fa, #f5f6fa 10px, #eef0f5 10px, #eef0f5 20px)' : (block ? (block.isExternal ? 'var(--primary-light)' : 'var(--secondary-color)') : 'white'), 
                                 borderBottom: isLastClass ? '2px solid #dcdde1' : '1px solid #eee',
                                 padding: '5px',
                                 textAlign: 'center',
@@ -373,28 +387,30 @@ const TimetableEditor = () => {
                                 position: 'relative',
                                 boxShadow: block ? 'inset 0 0 0 1px rgba(0,0,0,0.05)' : 'none',
                                 transition: 'all 0.2s',
-                                cursor: 'pointer',
+                                cursor: isBlocked ? 'not-allowed' : 'pointer',
                                 zIndex: block ? 5 : 1,
                                 borderRight: period === 6 && d_index < 4 ? '2px solid #dcdde1' : '1px solid #eee'
                               }}
-                              onClick={() => { if (activeDropdown) closeDropdown(); }}
+                              onClick={() => { if (!isBlocked && activeDropdown) closeDropdown(); }}
                               >
-                                <button 
-                                  style={{ position: 'absolute', top: '2px', right: '2px', background: 'none', border: 'none', cursor: 'pointer', padding: '2px', zIndex: 2 }}
-                                  onClick={(e) => { 
-                                    e.stopPropagation();
-                                    if (activeDropdown === cellId) {
-                                      closeDropdown();
-                                    } else {
-                                      const rect = e.currentTarget.getBoundingClientRect();
-                                      setDropdownPos({ top: rect.bottom + 4, left: rect.right - 100 });
-                                      setDropdownInfo({ gradeId, classNum, day, period, block });
-                                      setActiveDropdown(cellId);
-                                    }
-                                  }}
-                                >
-                                  <MoreVertical size={14} color="#718093" />
-                                </button>
+                                {!isBlocked && (
+                                  <button 
+                                    style={{ position: 'absolute', top: '2px', right: '2px', background: 'none', border: 'none', cursor: 'pointer', padding: '2px', zIndex: 2 }}
+                                    onClick={(e) => { 
+                                      e.stopPropagation();
+                                      if (activeDropdown === cellId) {
+                                        closeDropdown();
+                                      } else {
+                                        const rect = e.currentTarget.getBoundingClientRect();
+                                        setDropdownPos({ top: rect.bottom + 4, left: rect.right - 100 });
+                                        setDropdownInfo({ gradeId, classNum, day, period, block });
+                                        setActiveDropdown(cellId);
+                                      }
+                                    }}
+                                  >
+                                    <MoreVertical size={14} color="#718093" />
+                                  </button>
+                                )}
                                 
                                 {block ? (
                                   <strong style={{ fontSize: '0.85rem' }}>{block.subject_id}</strong>
