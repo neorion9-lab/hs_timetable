@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTimetable } from '../context/TimetableContext';
-import { MoreVertical, FolderOpen, Wand2 } from 'lucide-react';
+import { MoreVertical, FolderOpen, Wand2, Sparkles } from 'lucide-react';
 import type { ClassBlock } from '../data/mockData';
 
 const TimetableEditor = () => {
@@ -25,6 +25,83 @@ const TimetableEditor = () => {
     blockId?: string;
   } | null>(null);
   const [inputSubject, setInputSubject] = useState('');
+
+  // Auto-fill panel state
+  const [autoFillSubject, setAutoFillSubject] = useState('');
+  const [autoFillGrade, setAutoFillGrade] = useState('G1');
+  const [autoFillClassCount, setAutoFillClassCount] = useState(7);
+  const [autoFillHours, setAutoFillHours] = useState(1);
+  const [autoFillResult, setAutoFillResult] = useState<string | null>(null);
+
+  const DAYS: { key: string; label: string; maxPeriod: number }[] = [
+    { key: 'Mon', label: '월', maxPeriod: 6 },
+    { key: 'Tue', label: '화', maxPeriod: 6 },
+    { key: 'Wed', label: '수', maxPeriod: 5 },
+    { key: 'Thu', label: '목', maxPeriod: 6 },
+    { key: 'Fri', label: '금', maxPeriod: 6 },
+  ];
+
+  const handleAutoFill = () => {
+    if (!autoFillSubject.trim()) {
+      setAutoFillResult('⚠️ 과목명을 입력해 주세요.');
+      return;
+    }
+    const newBlocks: ClassBlock[] = [];
+    let totalAssigned = 0;
+    let skippedClasses: string[] = [];
+
+    for (let classNum = 1; classNum <= autoFillClassCount; classNum++) {
+      let assignedForClass = 0;
+
+      outer: for (const day of DAYS) {
+        for (let period = 1; period <= day.maxPeriod; period++) {
+          if (assignedForClass >= autoFillHours) break outer;
+          // Check if this slot is already occupied
+          const occupied = [...classBlocks, ...newBlocks].some(
+            b =>
+              b.group_id === autoFillGrade &&
+              b.class_num === classNum &&
+              b.day_of_week === day.key &&
+              b.period_start <= period &&
+              b.period_start + b.duration > period
+          );
+          if (!occupied) {
+            newBlocks.push({
+              block_id: `CB_AUTO_${autoFillGrade}_${classNum}_${day.key}_${period}_${Date.now()}_${Math.random()}`,
+              year_id: '2026',
+              subject_id: autoFillSubject.trim(),
+              teacher_id: '담당',
+              room_id: `${classNum}반`,
+              group_id: autoFillGrade,
+              class_num: classNum,
+              day_of_week: day.key,
+              period_start: period,
+              duration: 1,
+              isExternal: false,
+            });
+            assignedForClass++;
+            totalAssigned++;
+          }
+        }
+      }
+
+      if (assignedForClass < autoFillHours) {
+        skippedClasses.push(`${classNum}반`);
+      }
+    }
+
+    if (newBlocks.length === 0) {
+      setAutoFillResult('❌ 배정할 수 있는 빈 슬롯이 없습니다.');
+      return;
+    }
+    setClassBlocks(prev => [...prev, ...newBlocks]);
+    const gradeLabel = autoFillGrade.replace('G', '') + '학년';
+    let msg = `✅ ${gradeLabel} ${autoFillClassCount}개 학급에 "${autoFillSubject.trim()}" 총 ${totalAssigned}시간 배정 완료!`;
+    if (skippedClasses.length > 0) {
+      msg += ` (${skippedClasses.join(', ')} 빈 슬롯 부족으로 일부 미배정)`;
+    }
+    setAutoFillResult(msg);
+  };
 
   const closeDropdown = () => {
     setActiveDropdown(null);
@@ -128,6 +205,71 @@ const TimetableEditor = () => {
             <Wand2 size={18} /> 자동배정하기
           </button>
         </div>
+      </div>
+
+      {/* Auto-fill Panel */}
+      <div className="autofill-panel">
+        <div className="autofill-panel-title">
+          <Sparkles size={18} />
+          <span>자동 과목 채우기</span>
+          <span className="autofill-panel-desc">빈 시간을 찾아 선택한 학년 전 학급에 자동 배정합니다</span>
+        </div>
+        <div className="autofill-controls">
+          <div className="autofill-field">
+            <label>과목명</label>
+            <input
+              type="text"
+              placeholder="예: 교통안전교육"
+              value={autoFillSubject}
+              onChange={e => { setAutoFillSubject(e.target.value); setAutoFillResult(null); }}
+              className="autofill-input"
+            />
+          </div>
+          <div className="autofill-field">
+            <label>학년</label>
+            <select
+              value={autoFillGrade}
+              onChange={e => setAutoFillGrade(e.target.value)}
+              className="autofill-select"
+            >
+              {['G1','G2','G3','G4','G5','G6'].map(g => (
+                <option key={g} value={g}>{g.replace('G','')}학년</option>
+              ))}
+            </select>
+          </div>
+          <div className="autofill-field">
+            <label>학급 수</label>
+            <input
+              type="number"
+              min={1}
+              max={20}
+              value={autoFillClassCount}
+              onChange={e => setAutoFillClassCount(Math.max(1, parseInt(e.target.value) || 1))}
+              className="autofill-input autofill-input-sm"
+            />
+            <span className="autofill-unit">반</span>
+          </div>
+          <div className="autofill-field">
+            <label>반별 배정 시간</label>
+            <input
+              type="number"
+              min={1}
+              max={6}
+              value={autoFillHours}
+              onChange={e => setAutoFillHours(Math.max(1, parseInt(e.target.value) || 1))}
+              className="autofill-input autofill-input-sm"
+            />
+            <span className="autofill-unit">시간</span>
+          </div>
+          <button className="btn autofill-btn" onClick={handleAutoFill}>
+            <Sparkles size={16} /> 자동 배정
+          </button>
+        </div>
+        {autoFillResult && (
+          <div className={`autofill-result ${autoFillResult.startsWith('✅') ? 'autofill-result-ok' : 'autofill-result-err'}`}>
+            {autoFillResult}
+          </div>
+        )}
       </div>
 
       <div className="card glass-panel" style={{ marginTop: '20px', padding: '20px', overflowX: 'auto' }}>
