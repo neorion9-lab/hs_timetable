@@ -214,9 +214,6 @@ const TimetableEditor = () => {
           <button className="btn btn-secondary" onClick={() => openFilePicker()}>
             <FolderOpen size={18} /> 새 일정 불러오기
           </button>
-          <button className="btn" onClick={() => openFilePicker()}>
-            <Wand2 size={18} /> 자동배정하기
-          </button>
         </div>
       </div>
 
