@@ -221,7 +221,7 @@ const TimetableEditor = () => {
               type="text"
               placeholder="예: 교통안전교육"
               value={autoFillSubject}
-              onChange={e => { setAutoFillSubject(e.target.value); setAutoFillResult(null); }}
+              onChange={e => setAutoFillSubject(e.target.value)}
               className="autofill-input"
             />
           </div>
