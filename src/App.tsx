@@ -1,6 +1,6 @@
 
 import { Routes, Route, NavLink } from 'react-router-dom';
-import { Home, Users, Calendar, BarChart2 } from 'lucide-react';
+import { Home, Users, Calendar, BarChart2, School } from 'lucide-react';
 import Dashboard from './pages/Dashboard';
 import GroupManager from './pages/GroupManager';
 import TimetableEditor from './pages/TimetableEditor';
@@ -30,6 +30,19 @@ function App() {
         <NavLink to="/compare" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
           <BarChart2 size={20} /> 연도 비교
         </NavLink>
+
+        {/* Teacher ID Card */}
+        <div className="teacher-id-card">
+          <div className="teacher-id-icon">
+            <School size={28} color="white" />
+          </div>
+          <div className="teacher-id-info">
+            <span className="teacher-id-label">소속학교</span>
+            <span className="teacher-id-school">서울개원초등학교</span>
+            <span className="teacher-id-label">이름</span>
+            <span className="teacher-id-name">교사 이현실</span>
+          </div>
+        </div>
       </nav>
       <main className="main-content">
         <Routes>

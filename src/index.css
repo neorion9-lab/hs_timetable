@@ -86,6 +86,9 @@ body {
   flex-direction: column;
   gap: 12px;
   z-index: 10;
+  position: sticky;
+  top: 0;
+  height: 100vh;
 }
 
 .sidebar h1 {
@@ -225,4 +228,61 @@ body {
 
 .grade-icon {
   color: var(--accent-color);
+}
+
+/* Teacher ID Card */
+.teacher-id-card {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: linear-gradient(135deg, #e8f4fd 0%, #d6eaf8 100%);
+  border: 1.5px solid #aed6f1;
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 4px 12px rgba(100, 160, 220, 0.15);
+}
+
+.teacher-id-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #5b9bd5 0%, #2980b9 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 3px 10px rgba(41, 128, 185, 0.35);
+}
+
+.teacher-id-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  overflow: hidden;
+}
+
+.teacher-id-label {
+  font-size: 0.72rem;
+  color: #7f8c8d;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.teacher-id-school {
+  font-size: 0.82rem;
+  color: #1a252f;
+  font-weight: 700;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 4px;
+}
+
+.teacher-id-name {
+  font-size: 0.88rem;
+  color: #2c3e50;
+  font-weight: 700;
+  line-height: 1.3;
 }
