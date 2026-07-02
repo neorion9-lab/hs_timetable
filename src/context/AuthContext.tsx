@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '../lib/firebase';
 import { 
   onAuthStateChanged, 
-  User, 
+  type User, 
   signInWithPopup, 
   GoogleAuthProvider, 
   signOut as firebaseSignOut 

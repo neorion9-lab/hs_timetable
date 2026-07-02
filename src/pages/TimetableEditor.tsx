@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTimetable } from '../context/TimetableContext';
-import { MoreVertical, FolderOpen, Wand2, Sparkles } from 'lucide-react';
+import { MoreVertical, FolderOpen, Sparkles } from 'lucide-react';
 import type { ClassBlock } from '../data/mockData';
 
 const TimetableEditor = () => {
