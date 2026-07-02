@@ -123,6 +123,25 @@ body {
   flex: 1;
   padding: 50px;
   overflow-y: auto;
+  min-width: 0;
+}
+
+/* Custom Scrollbar for glass panels */
+.glass-panel::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+}
+.glass-panel::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.03);
+  border-radius: 10px;
+  margin: 10px;
+}
+.glass-panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 107, 107, 0.4);
+  border-radius: 10px;
+}
+.glass-panel::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 107, 107, 0.7);
 }
 
 .page-title {
