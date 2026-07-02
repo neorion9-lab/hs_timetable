@@ -313,7 +313,6 @@ const TimetableEditor = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h1 className="page-title">시간표 템플릿 채우기 🪄</h1>
-          <p className="page-subtitle">불러온 시간표 파일의 내용이 자동으로 배치되었습니다.</p>
         </div>
         <div style={{ display: 'flex', gap: '10px' }}>
           <button className="btn btn-secondary" onClick={() => openFilePicker()}>

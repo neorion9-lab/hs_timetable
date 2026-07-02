@@ -1,10 +1,9 @@
 
 import { Routes, Route, NavLink } from 'react-router-dom';
-import { Home, Users, Calendar, BarChart2, School } from 'lucide-react';
+import { Home, Users, Calendar, School } from 'lucide-react';
 import Dashboard from './pages/Dashboard';
 import GroupManager from './pages/GroupManager';
 import TimetableEditor from './pages/TimetableEditor';
-import YearCompare from './pages/YearCompare';
 import Login from './pages/Login';
 import Footer from './components/Footer';
 import { useAuth } from './context/AuthContext';
@@ -38,9 +37,6 @@ function App() {
                 <NavLink to="/editor" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
                   <Calendar size={20} /> 시간표 편집/배정
                 </NavLink>
-                <NavLink to="/compare" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-                  <BarChart2 size={20} /> 연도 비교
-                </NavLink>
 
                 {/* Teacher ID Card */}
                 <div className="teacher-id-card">
@@ -67,7 +63,6 @@ function App() {
                   <Route path="/" element={<Dashboard />} />
                   <Route path="/groups" element={<GroupManager />} />
                   <Route path="/editor" element={<TimetableEditor />} />
-                  <Route path="/compare" element={<YearCompare />} />
                 </Routes>
                 <Footer />
               </main>
