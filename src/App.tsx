@@ -25,12 +25,12 @@ function App() {
         element={
           user ? (
             <div className="app-container">
-              <nav className="sidebar glass-panel" style={{ borderRadius: '0 20px 20px 0', borderLeft: 'none' }}>
+              <nav className="sidebar">
                 <h1 style={{ alignItems: 'flex-start' }}>
-                  <Calendar size={28} color="var(--primary-color)" style={{ marginTop: '4px' }} />
+                  <Calendar size={28} color="var(--ink)" style={{ marginTop: '4px' }} />
                   <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.2' }}>
                     <span>시간표</span>
-                    <span style={{ fontSize: '1.2rem' }}>배정 도우미</span>
+                    <span style={{ fontSize: '1.2rem', fontWeight: '500' }}>배정 도우미</span>
                   </div>
                 </h1>
                 <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
@@ -49,7 +49,7 @@ function App() {
                 {/* Teacher ID Card */}
                 <div className="teacher-id-card">
                   <div className="teacher-id-icon">
-                    <School size={28} color="white" />
+                    <School size={28} />
                   </div>
                   <div className="teacher-id-info">
                     <span className="teacher-id-label">소속학교</span>
@@ -59,16 +59,8 @@ function App() {
                   </div>
                   <button 
                     onClick={signOut}
-                    style={{
-                      marginTop: '10px',
-                      background: 'none',
-                      border: '1px solid rgba(255,255,255,0.3)',
-                      color: 'white',
-                      padding: '4px 8px',
-                      borderRadius: '4px',
-                      cursor: 'pointer',
-                      fontSize: '0.8rem'
-                    }}
+                    className="btn btn-secondary"
+                    style={{ marginTop: 'var(--spacing-sm)' }}
                   >
                     로그아웃
                   </button>

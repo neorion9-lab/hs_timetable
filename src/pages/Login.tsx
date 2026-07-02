@@ -15,62 +15,46 @@ const Login = () => {
       alignItems: 'center',
       justifyContent: 'center',
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%)',
-      fontFamily: "'Outfit', sans-serif"
+      background: 'var(--canvas)',
+      fontFamily: "var(--font-body)"
     }}>
-      <div className="glass-panel" style={{
+      <div className="product-mockup-card" style={{
         maxWidth: '400px',
         width: '90%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         padding: '50px 30px',
-        boxShadow: '0 20px 40px rgba(0,0,0,0.08)'
       }}>
         <div style={{
-          background: 'var(--primary-light)',
+          background: 'var(--surface-soft)',
           width: '70px',
           height: '70px',
           borderRadius: '50%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          marginBottom: '20px'
+          marginBottom: '20px',
+          border: '1px solid var(--hairline)'
         }}>
-          <Calendar size={36} color="var(--primary-color)" />
+          <Calendar size={36} color="var(--ink)" />
         </div>
-        <h1 style={{ margin: '0 0 10px 0', color: 'var(--text-color)', fontSize: '1.8rem', fontWeight: '700' }}>
+        <h1 style={{ margin: '0 0 10px 0', color: 'var(--ink)', fontSize: '24px', fontWeight: '600', fontFamily: 'var(--font-display)', letterSpacing: '-0.3px' }}>
           시간표 도우미
         </h1>
-        <p style={{ color: '#7f8fa6', fontSize: '0.95rem', marginBottom: '40px', textAlign: 'center', lineHeight: '1.5' }}>
+        <p style={{ color: 'var(--body)', fontSize: '14px', marginBottom: '40px', textAlign: 'center', lineHeight: '1.55' }}>
           학교 시간표 자동 배정 및 관리 시스템입니다.<br/>교사 계정으로 로그인해 주세요.
         </p>
         
         <button 
-          className="btn" 
           onClick={signInWithGoogle}
+          className="btn btn-secondary"
           style={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: '12px',
             width: '100%',
-            padding: '14px 20px',
-            fontSize: '1rem',
-            background: 'white',
-            color: '#333',
-            border: '1px solid #dcdde1',
-            boxShadow: '0 4px 6px rgba(0,0,0,0.02)',
-            transition: 'all 0.2s',
-            fontWeight: '600'
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.boxShadow = '0 6px 12px rgba(0,0,0,0.05)';
-            e.currentTarget.style.transform = 'translateY(-2px)';
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = '0 4px 6px rgba(0,0,0,0.02)';
-            e.currentTarget.style.transform = 'translateY(0)';
           }}
         >
           <img 

@@ -396,15 +396,14 @@ const TimetableEditor = () => {
                 <button 
                   className="btn btn-secondary" 
                   onClick={handleUndoAutoFill}
-                  style={{ background: '#f1f2f6', color: '#2f3640', border: '1px solid #dcdde1' }}
                 >
                   ⏪ 되돌리기
                 </button>
               )}
               <button 
-                className="btn btn-secondary" 
+                className="btn btn-primary" 
                 onClick={handleExportExcel}
-                style={{ background: '#20bf6b', color: 'white', border: 'none', boxShadow: '0 4px 15px rgba(32, 191, 107, 0.3)' }}
+                style={{ backgroundColor: 'var(--success)', color: 'white' }}
               >
                 <Download size={18} /> 변경된 시간표 저장하기
               </button>
@@ -429,21 +428,22 @@ const TimetableEditor = () => {
         )}
       </div>
 
-      <div className="glass-panel" style={{ marginTop: '20px', padding: '20px' }}>
+      <div className="product-mockup-card" style={{ marginTop: '20px', padding: '20px' }}>
         <div className="table-scroll-container" style={{ width: '100%', overflowX: 'auto', paddingBottom: '15px' }}>
           <div style={{ 
             display: 'grid', 
             gridTemplateColumns: '50px 50px repeat(30, minmax(55px, 1fr))', 
             gap: '0',
-            background: '#f1f2f6',
+            background: 'var(--canvas)',
             padding: '15px',
-            borderRadius: '16px',
-            minWidth: '1700px'
+            borderRadius: 'var(--rounded-lg)',
+            minWidth: '1700px',
+            border: '1px solid var(--hairline)'
           }}>
           {/* Header Row 1 */}
-          <div style={{ fontWeight: 'bold', textAlign: 'center', padding: '10px', gridColumn: '1 / span 2', gridRow: '1 / span 2', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '2px solid #dcdde1', borderBottom: '2px solid #dcdde1', background: '#dfe4ea', borderTopLeftRadius: '8px' }}>구분</div>
+          <div style={{ fontWeight: 'bold', textAlign: 'center', padding: '10px', gridColumn: '1 / span 2', gridRow: '1 / span 2', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '1px solid var(--hairline)', borderBottom: '1px solid var(--hairline)', background: 'var(--surface-soft)', borderTopLeftRadius: 'var(--rounded-md)' }}>구분</div>
           {['월', '화', '수', '목', '금'].map((day, i) => (
-            <div key={day} style={{ fontWeight: 'bold', textAlign: 'center', padding: '10px', gridColumn: `${i * 6 + 3} / span 6`, gridRow: 1, borderBottom: '2px solid #dcdde1', borderRight: i < 4 ? '2px solid #dcdde1' : 'none', background: '#dfe4ea', borderTopRightRadius: i === 4 ? '8px' : '0' }}>
+            <div key={day} style={{ fontWeight: 'bold', textAlign: 'center', padding: '10px', gridColumn: `${i * 6 + 3} / span 6`, gridRow: 1, borderBottom: '1px solid var(--hairline)', borderRight: i < 4 ? '1px solid var(--hairline)' : 'none', background: 'var(--surface-strong)', borderTopRightRadius: i === 4 ? 'var(--rounded-md)' : '0' }}>
               {day}
             </div>
           ))}
@@ -451,7 +451,7 @@ const TimetableEditor = () => {
           {/* Header Row 2 */}
           {['Mon', 'Tue', 'Wed', 'Thu', 'Fri'].flatMap((day, d_index) => 
             [1, 2, 3, 4, 5, 6].map(period => (
-              <div key={`header-${day}-${period}`} style={{ fontWeight: 'bold', textAlign: 'center', padding: '5px', gridColumn: 2 + (d_index * 6) + period, gridRow: 2, borderBottom: '2px solid #dcdde1', color: '#2f3640', fontSize: '0.8rem', borderRight: period === 6 && d_index < 4 ? '2px solid #dcdde1' : 'none', background: '#dfe4ea' }}>
+              <div key={`header-${day}-${period}`} style={{ fontWeight: 'bold', textAlign: 'center', padding: '5px', gridColumn: 2 + (d_index * 6) + period, gridRow: 2, borderBottom: '1px solid var(--hairline)', color: 'var(--ink)', fontSize: '13px', borderRight: period === 6 && d_index < 4 ? '1px solid var(--hairline)' : 'none', background: 'var(--surface-strong)' }}>
                 {period}
               </div>
             ))
@@ -490,7 +490,7 @@ const TimetableEditor = () => {
               return (
                 <React.Fragment key={gradeId}>
                   {/* Grade Header (Spanning rows) */}
-                  <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gridColumn: 1, gridRow: `${startRowIdx} / span ${numClasses}`, borderRight: '1px solid #dcdde1', background: 'white', padding: '5px', borderBottom: '2px solid #dcdde1' }}>
+                  <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gridColumn: 1, gridRow: `${startRowIdx} / span ${numClasses}`, borderRight: '1px solid var(--hairline)', background: 'var(--canvas)', padding: '5px', borderBottom: '1px solid var(--hairline)' }}>
                     {gradeLabel}
                   </div>
 
@@ -502,7 +502,7 @@ const TimetableEditor = () => {
                     return (
                       <React.Fragment key={`${gradeId}-${classNum}`}>
                         {/* Class Label */}
-                        <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gridColumn: 2, gridRow: rowIdx, borderRight: '2px solid #dcdde1', background: 'white', padding: '5px', borderBottom: isLastClass ? '2px solid #dcdde1' : '1px solid #eee' }}>
+                        <div style={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center', gridColumn: 2, gridRow: rowIdx, borderRight: '1px solid var(--hairline)', background: 'var(--canvas)', padding: '5px', borderBottom: isLastClass ? '1px solid var(--hairline)' : '1px solid var(--hairline-soft)' }}>
                           {classNum}반
                         </div>
 
@@ -521,8 +521,8 @@ const TimetableEditor = () => {
                               <div key={cellId} style={{ 
                                 gridColumn: block ? `${colIdx} / span ${block.duration}` : `${colIdx} / span 1`,
                                 gridRow: rowIdx,
-                                background: isBlocked ? 'repeating-linear-gradient(45deg, #f5f6fa, #f5f6fa 10px, #eef0f5 10px, #eef0f5 20px)' : (block ? (block.block_id.startsWith('CB_EXCEL_') ? 'var(--secondary-color)' : '#dff9fb') : 'white'), 
-                                borderBottom: isLastClass ? '2px solid #dcdde1' : '1px solid #eee',
+                                background: isBlocked ? 'repeating-linear-gradient(45deg, var(--surface-soft), var(--surface-soft) 10px, var(--surface-strong) 10px, var(--surface-strong) 20px)' : (block ? (block.block_id.startsWith('CB_EXCEL_') ? 'var(--brand-peach)' : 'var(--brand-mint)') : 'var(--canvas)'), 
+                                borderBottom: isLastClass ? '1px solid var(--hairline)' : '1px solid var(--hairline-soft)',
                                 padding: '5px',
                                 textAlign: 'center',
                                 minHeight: '60px',
@@ -530,11 +530,10 @@ const TimetableEditor = () => {
                                 flexDirection: 'column',
                                 justifyContent: 'center',
                                 position: 'relative',
-                                boxShadow: block ? 'inset 0 0 0 1px rgba(0,0,0,0.05)' : 'none',
                                 transition: 'all 0.2s',
                                 cursor: isBlocked ? 'not-allowed' : 'pointer',
                                 zIndex: block ? 5 : 1,
-                                borderRight: period === 6 && d_index < 4 ? '2px solid #dcdde1' : '1px solid #eee'
+                                borderRight: period === 6 && d_index < 4 ? '1px solid var(--hairline)' : '1px solid var(--hairline-soft)'
                               }}
                               onClick={() => { if (!isBlocked && activeDropdown) closeDropdown(); }}
                               >

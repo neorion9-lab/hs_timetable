@@ -119,12 +119,12 @@ const Dashboard = () => {
       <p className="page-subtitle">시간표 생성 도우미와 함께 편리하게 시간표를 관리하세요.</p>
 
       <div className="dashboard-grid">
-        <div className="card glass-panel">
+        <div className="product-mockup-card">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
-            <CalendarPlus size={24} color="var(--primary-color)" />
+            <CalendarPlus size={24} color="var(--ink)" />
             <h2 style={{ margin: 0 }}>시간표 만들기</h2>
           </div>
-          <p style={{ fontSize: '1.2rem', color: 'var(--text-color)' }}><strong>{academicYears[0].label}</strong></p>
+          <p style={{ fontSize: '1.2rem', color: 'var(--ink)' }}><strong>{academicYears[0].label}</strong></p>
           <p>{academicYears[0].startDate} ~ {academicYears[0].endDate}</p>
           <input 
             type="file" 
@@ -143,15 +143,15 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="card glass-panel">
+        <div className="product-mockup-card">
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
-            <Users size={24} color="var(--secondary-color)" />
+            <Users size={24} color="var(--ink)" />
             <h2 style={{ margin: 0 }}>학년 그룹 현황</h2>
           </div>
           <p>현재 <strong>{groups.length}개</strong>의 그룹이 생성되어 있어요!</p>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '15px', marginBottom: '20px' }}>
             {groups.map(g => (
-              <span key={g.group_id} style={{ background: '#f1f2f6', color: '#2f3640', padding: '6px 14px', borderRadius: '20px', fontSize: '0.9rem', fontWeight: 600 }}>
+              <span key={g.group_id} style={{ background: 'var(--surface-strong)', color: 'var(--ink)', padding: '6px 14px', borderRadius: 'var(--rounded-pill)', fontSize: '0.9rem', fontWeight: 600 }}>
                 {g.name}
               </span>
             ))}

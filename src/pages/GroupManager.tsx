@@ -42,7 +42,7 @@ const DroppableColumn = ({ id, name, items }: { id: string, name: string, items:
   const { setNodeRef } = useDroppable({ id });
 
   return (
-    <div ref={setNodeRef} className="group-column glass-panel">
+    <div ref={setNodeRef} className="group-column">
       <h3>{name}</h3>
       <SortableContext id={id} items={items} strategy={verticalListSortingStrategy}>
         {items.map(gradeId => (
