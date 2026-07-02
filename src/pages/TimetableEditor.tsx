@@ -364,16 +364,17 @@ const TimetableEditor = () => {
         )}
       </div>
 
-      <div className="glass-panel" style={{ marginTop: '20px', padding: '20px', overflowX: 'auto' }}>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: '50px 50px repeat(30, minmax(55px, 1fr))', 
-          gap: '0',
-          background: '#f1f2f6',
-          padding: '15px',
-          borderRadius: '16px',
-          minWidth: '1700px'
-        }}>
+      <div className="glass-panel" style={{ marginTop: '20px', padding: '20px' }}>
+        <div className="table-scroll-container" style={{ width: '100%', overflowX: 'auto', paddingBottom: '15px' }}>
+          <div style={{ 
+            display: 'grid', 
+            gridTemplateColumns: '50px 50px repeat(30, minmax(55px, 1fr))', 
+            gap: '0',
+            background: '#f1f2f6',
+            padding: '15px',
+            borderRadius: '16px',
+            minWidth: '1700px'
+          }}>
           {/* Header Row 1 */}
           <div style={{ fontWeight: 'bold', textAlign: 'center', padding: '10px', gridColumn: '1 / span 2', gridRow: '1 / span 2', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRight: '2px solid #dcdde1', borderBottom: '2px solid #dcdde1', background: '#dfe4ea', borderTopLeftRadius: '8px' }}>구분</div>
           {['월', '화', '수', '목', '금'].map((day, i) => (
@@ -505,6 +506,7 @@ const TimetableEditor = () => {
               )
             })
           })()}
+        </div>
         </div>
       </div>
     </div>
