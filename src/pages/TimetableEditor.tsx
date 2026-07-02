@@ -521,7 +521,7 @@ const TimetableEditor = () => {
                               <div key={cellId} style={{ 
                                 gridColumn: block ? `${colIdx} / span ${block.duration}` : `${colIdx} / span 1`,
                                 gridRow: rowIdx,
-                                background: isBlocked ? 'repeating-linear-gradient(45deg, #f5f6fa, #f5f6fa 10px, #eef0f5 10px, #eef0f5 20px)' : (block ? (block.isExternal ? 'var(--primary-light)' : 'var(--secondary-color)') : 'white'), 
+                                background: isBlocked ? 'repeating-linear-gradient(45deg, #f5f6fa, #f5f6fa 10px, #eef0f5 10px, #eef0f5 20px)' : (block ? (block.block_id.startsWith('CB_EXCEL_') ? 'var(--secondary-color)' : '#dff9fb') : 'white'), 
                                 borderBottom: isLastClass ? '2px solid #dcdde1' : '1px solid #eee',
                                 padding: '5px',
                                 textAlign: 'center',
