@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useTimetable } from '../context/TimetableContext';
-import { MoreVertical, FolderOpen, Sparkles } from 'lucide-react';
+import { MoreVertical, FolderOpen, Sparkles, Download } from 'lucide-react';
 import type { ClassBlock } from '../data/mockData';
 
 const TimetableEditor = () => {
@@ -247,6 +247,64 @@ const TimetableEditor = () => {
     input.click();
   };
 
+  const handleExportExcel = async () => {
+    try {
+      const XLSX = await import('xlsx');
+      const assignedGroup = groups.find(g => g.name === '배정 대상');
+      const assignedGrades = assignedGroup && assignedGroup.memberGradeIds.length > 0
+        ? assignedGroup.memberGradeIds
+        : ['G1', 'G2', 'G3', 'G4', 'G5', 'G6'];
+        
+      const classCounts: Record<string, number> = { G1: 7, G2: 6, G3: 8, G4: 6, G5: 8, G6: 7 };
+      
+      const exportData: any[][] = [];
+      
+      // Header Rows
+      const headerRow1 = ['구분', '학급'];
+      const headerRow2 = ['', ''];
+      
+      for (const day of DAYS) {
+        for (let p = 1; p <= day.maxPeriod; p++) {
+          headerRow1.push(`${day.label}`);
+          headerRow2.push(`${p}교시`);
+        }
+      }
+      exportData.push(headerRow1);
+      exportData.push(headerRow2);
+      
+      // Data Rows
+      for (const gradeId of assignedGrades) {
+        const numClasses = classCounts[gradeId] || 5;
+        for (let classNum = 1; classNum <= numClasses; classNum++) {
+          const rowData: string[] = [`${gradeId.replace('G', '')}학년`, `${classNum}반`];
+          
+          for (const day of DAYS) {
+            for (let p = 1; p <= day.maxPeriod; p++) {
+              const block = classBlocks.find(b => 
+                b.group_id === gradeId && 
+                b.class_num === classNum && 
+                b.day_of_week === day.key && 
+                b.period_start <= p && 
+                b.period_start + b.duration > p
+              );
+              rowData.push(block ? block.subject_id : '');
+            }
+          }
+          exportData.push(rowData);
+        }
+      }
+
+      const worksheet = XLSX.utils.aoa_to_sheet(exportData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, '시간표');
+      XLSX.writeFile(workbook, '변경된_시간표.xlsx');
+      
+    } catch (err) {
+      console.error(err);
+      alert('엑셀 저장 중 오류가 발생했습니다.');
+    }
+  };
+
   return (
     <>
       <div className="fade-in">
@@ -343,6 +401,13 @@ const TimetableEditor = () => {
                   ⏪ 되돌리기
                 </button>
               )}
+              <button 
+                className="btn btn-secondary" 
+                onClick={handleExportExcel}
+                style={{ background: '#20bf6b', color: 'white', border: 'none', boxShadow: '0 4px 15px rgba(32, 191, 107, 0.3)' }}
+              >
+                <Download size={18} /> 변경된 시간표 저장하기
+              </button>
             </div>
           </div>
         </div>
