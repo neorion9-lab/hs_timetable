@@ -26,21 +26,18 @@ function App() {
           user ? (
             <div className="app-container">
               <nav className="sidebar">
-                <h1 style={{ alignItems: 'flex-start' }}>
-                  <Calendar size={28} color="var(--ink)" style={{ marginTop: '4px' }} />
-                  <div style={{ display: 'flex', flexDirection: 'column', lineHeight: '1.2' }}>
-                    <span>시간표</span>
-                    <span style={{ fontSize: '1.2rem', fontWeight: '500' }}>배정 도우미</span>
-                  </div>
+                <h1 style={{ alignItems: 'center' }}>
+                  <span style={{ fontSize: '26px', marginRight: '8px' }}>🪄</span>
+                  <span style={{ fontWeight: '700', fontSize: '1.3rem', color: 'var(--ink)' }}>시수마법사</span>
                 </h1>
                 <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-                  <Home size={20} /> 대시보드
+                  <Home size={20} /> 시간표 만들기
                 </NavLink>
                 <NavLink to="/groups" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
                   <Users size={20} /> 그룹 관리
                 </NavLink>
                 <NavLink to="/editor" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-                  <Calendar size={20} /> 시간표 편집
+                  <Calendar size={20} /> 시간표 편집/배정
                 </NavLink>
                 <NavLink to="/compare" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
                   <BarChart2 size={20} /> 연도 비교

@@ -7,6 +7,8 @@ const TimetableEditor = () => {
   const { groups, classBlocks, setClassBlocks } = useTimetable();
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null);
+  const [isBatchDeleteMode, setIsBatchDeleteMode] = useState(false);
+  const [selectedBlocksForDelete, setSelectedBlocksForDelete] = useState<Set<string>>(new Set());
   const [dropdownInfo, setDropdownInfo] = useState<{
     gradeId: string;
     classNum: number;
@@ -407,6 +409,44 @@ const TimetableEditor = () => {
               >
                 <Download size={18} /> 변경된 시간표 저장하기
               </button>
+              {isBatchDeleteMode ? (
+                <>
+                  <button 
+                    className="btn btn-primary"
+                    style={{ backgroundColor: '#ff4757', color: 'white' }}
+                    onClick={() => {
+                      if (selectedBlocksForDelete.size === 0) {
+                        alert('삭제할 수업을 선택해주세요.');
+                        return;
+                      }
+                      if (window.confirm(`선택한 ${selectedBlocksForDelete.size}개의 수업을 삭제하시겠습니까?`)) {
+                        setClassBlocks(prev => prev.filter(b => !selectedBlocksForDelete.has(b.block_id)));
+                        setSelectedBlocksForDelete(new Set());
+                        setIsBatchDeleteMode(false);
+                      }
+                    }}
+                  >
+                    🗑 선택 삭제 ({selectedBlocksForDelete.size})
+                  </button>
+                  <button 
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      setIsBatchDeleteMode(false);
+                      setSelectedBlocksForDelete(new Set());
+                    }}
+                  >
+                    취소
+                  </button>
+                </>
+              ) : (
+                <button 
+                  className="btn btn-secondary"
+                  style={{ color: '#ff4757', borderColor: '#ff4757' }}
+                  onClick={() => setIsBatchDeleteMode(true)}
+                >
+                  🗑 수업 일괄 삭제
+                </button>
+              )}
             </div>
           </div>
         </div>
@@ -535,9 +575,25 @@ const TimetableEditor = () => {
                                 zIndex: block ? 5 : 1,
                                 borderRight: period === 6 && d_index < 4 ? '1px solid var(--hairline)' : '1px solid var(--hairline-soft)'
                               }}
-                              onClick={() => { if (!isBlocked && activeDropdown) closeDropdown(); }}
+                              onClick={() => { 
+                                if (!isBlocked) {
+                                  if (isBatchDeleteMode) {
+                                    if (block) {
+                                      const newSet = new Set(selectedBlocksForDelete);
+                                      if (newSet.has(block.block_id)) {
+                                        newSet.delete(block.block_id);
+                                      } else {
+                                        newSet.add(block.block_id);
+                                      }
+                                      setSelectedBlocksForDelete(newSet);
+                                    }
+                                  } else {
+                                    if (activeDropdown) closeDropdown(); 
+                                  }
+                                }
+                              }}
                               >
-                                {!isBlocked && (
+                                {!isBlocked && !isBatchDeleteMode && (
                                   <button 
                                     style={{ position: 'absolute', top: '2px', right: '2px', background: 'none', border: 'none', cursor: 'pointer', padding: '2px', zIndex: 2 }}
                                     onClick={(e) => { 
@@ -554,6 +610,14 @@ const TimetableEditor = () => {
                                   >
                                     <MoreVertical size={14} color="#718093" />
                                   </button>
+                                )}
+                                {!isBlocked && isBatchDeleteMode && block && (
+                                  <input 
+                                    type="checkbox"
+                                    checked={selectedBlocksForDelete.has(block.block_id)}
+                                    readOnly
+                                    style={{ position: 'absolute', top: '4px', left: '4px', pointerEvents: 'none', zIndex: 2, width: '14px', height: '14px', accentColor: '#ff4757' }}
+                                  />
                                 )}
                                 
                                 {block ? (
