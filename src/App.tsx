@@ -26,9 +26,8 @@ function App() {
           user ? (
             <div className="app-container">
               <nav className="sidebar">
-                <h1 style={{ alignItems: 'center' }}>
-                  <span style={{ fontSize: '26px', marginRight: '8px' }}>🪄</span>
-                  <span style={{ fontWeight: '700', fontSize: '1.3rem', color: 'var(--ink)' }}>시수마법사</span>
+                <h1 style={{ display: 'flex', alignItems: 'center', margin: 0, paddingBottom: 'var(--spacing-md)' }}>
+                  <img src="/시수마법사 타이틀.png" alt="시수마법사" style={{ height: '36px', width: 'auto', objectFit: 'contain' }} />
                 </h1>
                 <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
                   <Home size={20} /> 시간표 만들기

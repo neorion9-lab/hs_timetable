@@ -100,6 +100,18 @@ const Login = () => {
           }}>
             ✨ 복잡한 조건도 단 1초 만에 스마트하게 배정
           </div>
+          
+          <img 
+            src="/submitter_info.jpeg" 
+            alt="제출자 소속" 
+            style={{ 
+              marginTop: '30px', 
+              width: '100%', 
+              maxWidth: '280px', 
+              borderRadius: '8px',
+              objectFit: 'contain'
+            }} 
+          />
         </div>
       </div>
       
