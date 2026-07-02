@@ -131,27 +131,29 @@ h1, h2, h3, h4, h5, h6 {
 
 .nav-link {
   text-decoration: none;
-  color: var(--muted);
+  color: var(--on-primary);
+  background-color: var(--success);
   font-family: var(--font-body);
-  font-size: 14px;
-  font-weight: 500;
-  padding: var(--spacing-sm) var(--spacing-md);
-  border-radius: var(--rounded-pill);
+  font-size: 24px;
+  font-weight: 600;
+  padding: 16px 24px;
+  border-radius: var(--rounded-lg);
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: 12px;
+  margin-bottom: var(--spacing-sm);
 }
 
 .nav-link:hover {
-  background-color: rgba(0,0,0,0.03);
-  color: var(--ink);
+  background-color: #16a34a;
+  color: var(--on-primary);
 }
 
 .nav-link.active {
-  background-color: var(--surface-card);
-  color: var(--ink);
-  font-weight: 600;
+  background-color: #15803d;
+  color: var(--on-primary);
+  font-weight: 700;
 }
 
 /* Components */

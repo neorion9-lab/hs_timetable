@@ -40,7 +40,6 @@ const PRIVACY_CONTENT = (
     <p>수집한 개인정보는 아래 목적으로만 이용합니다.</p>
     <ol>
       <li><strong>시간표 생성·관리</strong>: 교사별 가용 시간 기반 수업 블록 배치 및 충돌 검증</li>
-      <li><strong>연도별 비교·아카이브</strong>: 학년도 변경 시 이전 시간표와의 차이 분석</li>
       <li><strong>외부강사 수업 배치</strong>: 외부강사 가용성 정보를 활용한 AI 수업 등 특수 수업 매핑</li>
       <li><strong>서비스 운영·개선</strong>: 오류 추적, 성능 최적화, 피드백 수집 설문 연동</li>
       <li><strong>보안 및 접근 제어</strong>: RBAC(역할 기반 접근 제어) 적용을 위한 역할 정보 확인</li>
@@ -170,7 +169,6 @@ const TERMS_CONTENT = (
         <tr><td>시간표 불러오기</td><td>엑셀(.xlsx/.xls/.csv) 또는 JSON 파일 업로드로 수업 블록 자동 파싱</td></tr>
         <tr><td>그룹 관리</td><td>Drag-and-Drop으로 학년 그룹 생성·편집·재배치</td></tr>
         <tr><td>시간표 에디터</td><td>수업 블록 단위 수정, 충돌 확인, 외부강사 수업 매핑</td></tr>
-        <tr><td>연도 비교 뷰</td><td>교사 충돌 수·실 충돌 수·신규 수업 추가·제외 차이 요약 카드 제공</td></tr>
         <tr><td>피드백 수집</td><td>설문 형식의 피드백 창구 제공</td></tr>
         <tr><td>데이터 내보내기</td><td>완성된 시간표를 파일로 저장 (추후 지원 예정)</td></tr>
       </tbody>
@@ -228,7 +226,7 @@ const TERMS_CONTENT = (
       <tbody>
         <tr><td><strong>관리자(IT/행정실장)</strong></td><td>전체 데이터 열람·수정, 사용자 계정 관리, 시스템 설정</td></tr>
         <tr><td><strong>교사(담임/전담)</strong></td><td>소속 학년 시간표 열람 및 수정 요청</td></tr>
-        <tr><td><strong>행정직원</strong></td><td>전체 시간표 열람, 연도 비교 뷰 접근</td></tr>
+        <tr><td><strong>행정직원</strong></td><td>전체 시간표 열람</td></tr>
         <tr><td><strong>외부강사 조정팀</strong></td><td>외부강사 수업 블록 열람 및 가용 시간 입력</td></tr>
       </tbody>
     </table>

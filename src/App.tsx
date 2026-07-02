@@ -26,16 +26,16 @@ function App() {
             <div className="app-container">
               <nav className="sidebar">
                 <h1 style={{ display: 'flex', alignItems: 'center', margin: 0, paddingBottom: 'var(--spacing-md)' }}>
-                  <img src="/시수마법사 타이틀.png" alt="시수마법사" style={{ height: '36px', width: 'auto', objectFit: 'contain' }} />
+                  <img src="/시수마법사 타이틀.png" alt="시수마법사" style={{ height: '72px', width: 'auto', objectFit: 'contain' }} />
                 </h1>
                 <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-                  <Home size={20} /> 시간표 만들기
+                  <Home size={28} /> 시간표 만들기
                 </NavLink>
                 <NavLink to="/groups" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-                  <Users size={20} /> 그룹 관리
+                  <Users size={28} /> 그룹 관리
                 </NavLink>
                 <NavLink to="/editor" className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'}>
-                  <Calendar size={20} /> 시간표 편집/배정
+                  <Calendar size={28} /> 시간표 편집/배정
                 </NavLink>
 
                 {/* Teacher ID Card */}

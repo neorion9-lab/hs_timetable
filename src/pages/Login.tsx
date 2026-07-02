@@ -30,18 +30,18 @@ const Login = () => {
         width: '100%'
       }}>
         <div className="product-mockup-card" style={{
-          maxWidth: '520px',
+          maxWidth: '680px',
           width: '100%',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          padding: '70px 50px',
+          padding: '80px 60px',
           boxSizing: 'border-box'
         }}>
           <div style={{
             background: 'var(--surface-soft)',
-            width: '90px',
-            height: '90px',
+            width: '110px',
+            height: '110px',
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',
@@ -50,12 +50,12 @@ const Login = () => {
             border: '1px solid var(--hairline)',
             boxShadow: '0 4px 12px rgba(0,0,0,0.03)'
           }}>
-            <Calendar size={48} color="var(--ink)" />
+            <Calendar size={60} color="var(--ink)" />
           </div>
-          <h1 style={{ margin: '0 0 16px 0', color: 'var(--ink)', fontSize: '36px', fontWeight: '700', fontFamily: 'var(--font-display)', letterSpacing: '-0.5px' }}>
+          <h1 style={{ margin: '0 0 16px 0', color: 'var(--ink)', fontSize: '52px', fontWeight: '700', fontFamily: 'var(--font-display)', letterSpacing: '-0.5px' }}>
             시수마법사 🪄
           </h1>
-          <p style={{ color: 'var(--body)', fontSize: '18px', marginBottom: '48px', textAlign: 'center', lineHeight: '1.6', wordBreak: 'keep-all' }}>
+          <p style={{ color: 'var(--body)', fontSize: '24px', marginBottom: '48px', textAlign: 'center', lineHeight: '1.6', wordBreak: 'keep-all' }}>
             며칠씩 걸리던 시간표 작업,<br/>클릭 한 번으로 끝나는 자동 배정
           </p>
           
@@ -68,27 +68,27 @@ const Login = () => {
               justifyContent: 'center',
               gap: '14px',
               width: '100%',
-              height: '64px',
-              fontSize: '18px',
+              height: '76px',
+              fontSize: '22px',
               fontWeight: '600',
-              borderRadius: '14px',
+              borderRadius: '16px',
               transition: 'all 0.2s ease',
             }}
           >
             <img 
               src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" 
               alt="Google logo" 
-              style={{ width: '28px', height: '28px' }} 
+              style={{ width: '36px', height: '36px' }} 
             />
             Google로 로그인
           </button>
           
           <div style={{
             marginTop: '32px',
-            padding: '12px 24px',
+            padding: '16px 28px',
             background: 'var(--surface-soft)',
             borderRadius: '100px',
-            fontSize: '15px',
+            fontSize: '18px',
             fontWeight: '500',
             color: 'var(--body)',
             opacity: 0.8,
@@ -102,13 +102,13 @@ const Login = () => {
           </div>
           
           <img 
-            src="/submitter_info.jpeg" 
+            src="/title11.jpeg" 
             alt="제출자 소속" 
             style={{ 
-              marginTop: '40px', 
+              marginTop: '48px', 
               width: '100%', 
-              maxWidth: '360px', 
-              borderRadius: '12px',
+              maxWidth: '480px', 
+              borderRadius: '16px',
               objectFit: 'contain'
             }} 
           />
