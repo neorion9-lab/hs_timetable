@@ -115,10 +115,12 @@ const Dashboard = () => {
 
   return (
     <div className="fade-in">
-      <h1 className="page-title" style={{ marginBottom: 'var(--spacing-sm)' }}>
-        <img src="/logo.jpeg" alt="시수마법사" className="dashboard-logo" />
+      <h1 className="page-title" style={{ marginBottom: 'var(--spacing-sm)', fontSize: '56px', fontWeight: '800' }}>
+        시수마법사 🪄
       </h1>
-      <p className="page-subtitle">시수 마법사와 함께 편리하게 시간표를 관리하세요.</p>
+      <p className="page-subtitle" style={{ fontSize: '15px' }}>
+        복잡한 조건도 단 1초 만에, 원클릭 시간표 자동 배정 마법, 부장님의 퇴근시간을 앞당겨드립니다!
+      </p>
 
       <div className="dashboard-grid">
         <div className="product-mockup-card">
