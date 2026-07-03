@@ -48,7 +48,7 @@ function App() {
                   <button 
                     onClick={signOut}
                     className="btn btn-secondary"
-                    style={{ marginTop: 'var(--spacing-sm)' }}
+                    style={{ marginTop: 'var(--spacing-sm)', fontSize: '16px', fontWeight: 'bold' }}
                   >
                     로그아웃
                   </button>
