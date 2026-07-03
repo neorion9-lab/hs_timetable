@@ -121,7 +121,7 @@ h1, h2, h3, h4, h5, h6 {
 .sidebar {
   width: 260px;
   background-color: var(--surface-soft);
-  padding: 50px var(--spacing-lg) var(--spacing-xl);
+  padding: 240px var(--spacing-lg) var(--spacing-xl);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
