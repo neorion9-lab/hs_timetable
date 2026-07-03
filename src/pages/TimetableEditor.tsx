@@ -9,6 +9,9 @@ const TimetableEditor = () => {
   const [dropdownPos, setDropdownPos] = useState<{ top: number; left: number } | null>(null);
   const [isBatchDeleteMode, setIsBatchDeleteMode] = useState(false);
   const [selectedBlocksForDelete, setSelectedBlocksForDelete] = useState<Set<string>>(new Set());
+  const [isBatchAddMode, setIsBatchAddMode] = useState(false);
+  const [selectedSubjectForAdd, setSelectedSubjectForAdd] = useState('');
+  const [selectedCellsForAdd, setSelectedCellsForAdd] = useState<Set<string>>(new Set());
   const [dropdownInfo, setDropdownInfo] = useState<{
     gradeId: string;
     classNum: number;
@@ -437,6 +440,54 @@ const TimetableEditor = () => {
                     취소
                   </button>
                 </>
+              ) : isBatchAddMode ? (
+                <>
+                  <button 
+                    className="btn btn-primary"
+                    style={{ backgroundColor: 'var(--brand-peach)', color: 'var(--ink)' }}
+                    onClick={() => {
+                      if (selectedCellsForAdd.size === 0) {
+                        alert('추가할 칸을 선택해주세요.');
+                        return;
+                      }
+                      if (window.confirm(`선택한 ${selectedCellsForAdd.size}개의 칸에 "${selectedSubjectForAdd}" 과목을 일괄 추가하시겠습니까?`)) {
+                        const newBlocks: ClassBlock[] = [];
+                        Array.from(selectedCellsForAdd).forEach(cellId => {
+                          const [gradeId, classNumStr, day, periodStr] = cellId.split('-');
+                          newBlocks.push({
+                            block_id: `CB_BATCH_${Date.now()}_${Math.random().toString(36).substr(2,9)}`,
+                            year_id: '2026',
+                            subject_id: selectedSubjectForAdd,
+                            teacher_id: '담당',
+                            room_id: `${classNumStr}반`,
+                            group_id: gradeId,
+                            class_num: parseInt(classNumStr),
+                            day_of_week: day,
+                            period_start: parseInt(periodStr),
+                            duration: 1,
+                            isExternal: false,
+                          });
+                        });
+                        setClassBlocks(prev => [...prev.filter(b => !selectedCellsForAdd.has(`${b.group_id}-${b.class_num}-${b.day_of_week}-${b.period_start}`)), ...newBlocks]);
+                        setIsBatchAddMode(false);
+                        setSelectedSubjectForAdd('');
+                        setSelectedCellsForAdd(new Set());
+                      }
+                    }}
+                  >
+                    ➕ {selectedSubjectForAdd} 추가 ({selectedCellsForAdd.size})
+                  </button>
+                  <button 
+                    className="btn btn-secondary"
+                    onClick={() => {
+                      setIsBatchAddMode(false);
+                      setSelectedSubjectForAdd('');
+                      setSelectedCellsForAdd(new Set());
+                    }}
+                  >
+                    취소
+                  </button>
+                </>
               ) : (
                 <>
                   <button 
@@ -451,7 +502,9 @@ const TimetableEditor = () => {
                     style={{ color: 'var(--primary)', borderColor: 'var(--primary)', cursor: 'pointer', appearance: 'none', paddingRight: '30px', backgroundImage: 'url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007BFF%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.4-12.8z%22%2F%3E%3C%2Fsvg%3E")', backgroundRepeat: 'no-repeat', backgroundPosition: 'right 10px center', backgroundSize: '12px auto' }}
                     onChange={(e) => {
                       if (e.target.value) {
-                        alert(`${e.target.value} 과목 일괄 추가 기능은 개발 중입니다.`);
+                        setIsBatchAddMode(true);
+                        setSelectedSubjectForAdd(e.target.value);
+                        setSelectedCellsForAdd(new Set());
                         e.target.value = '';
                       }
                     }}
@@ -603,13 +656,21 @@ const TimetableEditor = () => {
                                       }
                                       setSelectedBlocksForDelete(newSet);
                                     }
+                                  } else if (isBatchAddMode) {
+                                    const newSet = new Set(selectedCellsForAdd);
+                                    if (newSet.has(cellId)) {
+                                      newSet.delete(cellId);
+                                    } else {
+                                      newSet.add(cellId);
+                                    }
+                                    setSelectedCellsForAdd(newSet);
                                   } else {
                                     if (activeDropdown) closeDropdown(); 
                                   }
                                 }
                               }}
                               >
-                                {!isBlocked && !isBatchDeleteMode && (
+                                {!isBlocked && !isBatchDeleteMode && !isBatchAddMode && (
                                   <button 
                                     style={{ position: 'absolute', top: '2px', right: '2px', background: 'none', border: 'none', cursor: 'pointer', padding: '2px', zIndex: 2 }}
                                     onClick={(e) => { 
@@ -633,6 +694,14 @@ const TimetableEditor = () => {
                                     checked={selectedBlocksForDelete.has(block.block_id)}
                                     readOnly
                                     style={{ position: 'absolute', top: '4px', left: '4px', pointerEvents: 'none', zIndex: 2, width: '14px', height: '14px', accentColor: '#ff4757' }}
+                                  />
+                                )}
+                                {!isBlocked && isBatchAddMode && (
+                                  <input 
+                                    type="checkbox"
+                                    checked={selectedCellsForAdd.has(cellId)}
+                                    readOnly
+                                    style={{ position: 'absolute', top: '4px', left: '4px', pointerEvents: 'none', zIndex: 6, width: '14px', height: '14px', accentColor: 'var(--primary)' }}
                                   />
                                 )}
                                 
