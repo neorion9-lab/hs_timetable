@@ -115,7 +115,7 @@ const Dashboard = () => {
 
   return (
     <div className="fade-in">
-      <h1 className="page-title" style={{ marginBottom: 'var(--spacing-sm)', fontSize: '56px', fontWeight: '800' }}>
+      <h1 className="page-title" style={{ marginBottom: 'var(--spacing-sm)' }}>
         시수마법사 🪄
       </h1>
       <p className="page-subtitle" style={{ fontSize: '15px' }}>
