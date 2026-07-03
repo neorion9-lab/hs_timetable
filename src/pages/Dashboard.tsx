@@ -116,7 +116,7 @@ const Dashboard = () => {
   return (
     <div className="fade-in">
       <h1 className="page-title" style={{ display: 'flex', alignItems: 'center', marginBottom: 'var(--spacing-sm)' }}>
-        <img src="/시수마법사 타이틀.png" alt="시수마법사" style={{ height: '90px', width: 'auto', objectFit: 'contain' }} />
+        <img src="/logo.jpeg" alt="시수마법사" style={{ height: '90px', width: 'auto', objectFit: 'contain' }} />
       </h1>
       <p className="page-subtitle">시수 마법사와 함께 편리하게 시간표를 관리하세요.</p>
 
