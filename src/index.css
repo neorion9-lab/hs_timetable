@@ -89,6 +89,20 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: var(--spacing-xl);
 }
 
+.dashboard-logo {
+  width: 100%;
+  height: auto;
+  border: 3px solid var(--success);
+  border-radius: var(--rounded-lg);
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .dashboard-logo {
+    width: calc(50% - 12px); /* Matches the first column of the 2-column grid with 24px gap */
+  }
+}
+
 /* Layout */
 .app-container {
   display: flex;
