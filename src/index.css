@@ -134,15 +134,16 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--on-primary);
   background-color: var(--success);
   font-family: var(--font-body);
-  font-size: 24px;
+  font-size: 18px;
   font-weight: 600;
-  padding: 16px 24px;
+  padding: 16px 16px;
   border-radius: var(--rounded-lg);
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: var(--spacing-sm);
+  white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -151,7 +152,6 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav-link.active {
-  background-color: #15803d;
   color: var(--on-primary);
   font-weight: 700;
 }
