@@ -4,6 +4,7 @@ import {
   onAuthStateChanged, 
   type User, 
   signInWithPopup, 
+  signInWithRedirect,
   GoogleAuthProvider, 
   signOut as firebaseSignOut 
 } from 'firebase/auth';
@@ -39,8 +40,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
     } catch (error: any) {
-      console.error('Login Error:', error);
-      alert(`로그인 실패: ${error.message}`);
+      if (error.code === 'auth/popup-blocked') {
+        alert('팝업 창이 차단되었습니다. "확인"을 누르시면 현재 창에서 바로 구글 로그인 페이지로 이동합니다.');
+        const provider = new GoogleAuthProvider();
+        await signInWithRedirect(auth, provider);
+      } else {
+        console.error('Login Error:', error);
+        alert(`로그인 실패: ${error.message}`);
+      }
     }
   };
 
