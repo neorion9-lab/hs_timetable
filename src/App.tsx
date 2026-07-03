@@ -44,8 +44,6 @@ function App() {
                     <School size={28} />
                   </div>
                   <div className="teacher-id-info">
-                    <span className="teacher-id-label">소속학교</span>
-                    <span className="teacher-id-school">서울개원초등학교</span>
                     <span className="teacher-id-label">이름</span>
                     <span className="teacher-id-name">{user.displayName || '교사'}</span>
                   </div>
