@@ -8,13 +8,13 @@ import { X, Shield, FileText, User } from 'lucide-react';
 const PRIVACY_CONTENT = (
   <div className="legal-body">
     <div className="legal-meta">
-      <span>서비스명: 시간표 생성 도우미 (HS Timetable)</span>
+      <span>서비스명: 시수 마법사 (HS Timetable)</span>
       <span>최종 수정일: 2026년 06월 30일</span>
       <span>시행일: 2026년 07월 01일</span>
     </div>
 
     <h2>제1조 (목적)</h2>
-    <p>본 방침은 <strong>시간표 생성 도우미</strong>(이하 "서비스")를 운영·제공하는 과정에서 이용자(교사, 행정직원 등 학교 구성원)의 개인정보를 어떻게 수집·이용·보관·파기하는지를 안내합니다. 서비스는 대한민국 「개인정보 보호법」 및 관련 법령을 준수합니다.</p>
+    <p>본 방침은 <strong>시수 마법사</strong>(이하 "서비스")를 운영·제공하는 과정에서 이용자(교사, 행정직원 등 학교 구성원)의 개인정보를 어떻게 수집·이용·보관·파기하는지를 안내합니다. 서비스는 대한민국 「개인정보 보호법」 및 관련 법령을 준수합니다.</p>
 
     <h2>제2조 (수집하는 개인정보의 항목 및 수집 방법)</h2>
     <h3>1. 수집 항목</h3>
@@ -124,13 +124,13 @@ const PRIVACY_CONTENT = (
 const TERMS_CONTENT = (
   <div className="legal-body">
     <div className="legal-meta">
-      <span>서비스명: 시간표 생성 도우미 (HS Timetable)</span>
+      <span>서비스명: 시수 마법사 (HS Timetable)</span>
       <span>최종 수정일: 2026년 06월 30일</span>
       <span>시행일: 2026년 07월 01일</span>
     </div>
 
     <h2>제1조 (목적)</h2>
-    <p>본 약관은 <strong>시간표 생성 도우미</strong>(이하 "서비스")의 이용 조건, 절차, 권리·의무 및 책임 사항을 규정함으로써 이용자(교사, 행정직원, 외부강사 조정팀 등 학교 구성원)와 운영자 간의 권익을 보호하고 원활한 서비스 이용을 도모하는 것을 목적으로 합니다.</p>
+    <p>본 약관은 <strong>시수 마법사</strong>(이하 "서비스")의 이용 조건, 절차, 권리·의무 및 책임 사항을 규정함으로써 이용자(교사, 행정직원, 외부강사 조정팀 등 학교 구성원)와 운영자 간의 권익을 보호하고 원활한 서비스 이용을 도모하는 것을 목적으로 합니다.</p>
 
     <h2>제2조 (정의)</h2>
     <table>
@@ -387,7 +387,7 @@ const Footer = () => {
 
           {/* 카피라이트 */}
           <div className="footer-copyright">
-            © 2026 시간표 생성 도우미. All rights reserved.
+            © 2026 시수 마법사. All rights reserved.
           </div>
         </div>
       </footer>

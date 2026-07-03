@@ -116,7 +116,7 @@ const Dashboard = () => {
   return (
     <div className="fade-in">
       <h1 className="page-title">안녕하세요, 선생님! 👋</h1>
-      <p className="page-subtitle">시간표 생성 도우미와 함께 편리하게 시간표를 관리하세요.</p>
+      <p className="page-subtitle">시수 마법사와 함께 편리하게 시간표를 관리하세요.</p>
 
       <div className="dashboard-grid">
         <div className="product-mockup-card">
