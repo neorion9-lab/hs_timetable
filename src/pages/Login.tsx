@@ -52,7 +52,7 @@ const Login = () => {
           }}>
             <Calendar size={40} color="var(--ink)" />
           </div>
-          <h1 style={{ margin: '0 0 12px 0', color: 'var(--ink)', fontSize: '40px', fontWeight: '700', fontFamily: 'var(--font-display)', letterSpacing: '-0.5px' }}>
+          <h1 style={{ margin: '0 0 12px 0', color: 'var(--ink)', fontSize: '40px', fontWeight: '500', fontFamily: 'var(--font-display)', letterSpacing: '-0.5px' }}>
             시수마법사 🪄
           </h1>
           <p style={{ color: 'var(--body)', fontSize: '18px', marginBottom: '24px', textAlign: 'center', lineHeight: '1.6', wordBreak: 'keep-all' }}>
