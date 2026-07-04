@@ -153,7 +153,7 @@ const Dashboard = () => {
             <h2 style={{ margin: 0 }}>학년 그룹 현황</h2>
           </div>
           <p style={{ marginBottom: '20px', lineHeight: '1.5' }}>시간표에 배정할 학년을 선택하고 간편하게 관리하세요.</p>
-          <button className="btn btn-pink" onClick={() => navigate('/groups')} style={{ marginTop: 'auto', alignSelf: 'flex-start' }}>
+          <button className="btn btn-pink" onClick={() => navigate('/groups')} style={{ marginTop: 'auto', alignSelf: 'flex-start', fontSize: '16px', fontWeight: 'bold' }}>
             그룹 관리하러 가기
           </button>
         </div>
