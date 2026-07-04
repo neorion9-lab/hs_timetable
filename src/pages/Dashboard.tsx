@@ -152,14 +152,7 @@ const Dashboard = () => {
             <Users size={24} color="var(--ink)" />
             <h2 style={{ margin: 0 }}>학년 그룹 현황</h2>
           </div>
-          <p>현재 <strong>{groups.length}개</strong>의 그룹이 생성되어 있어요!</p>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '15px', marginBottom: '20px' }}>
-            {groups.map(g => (
-              <span key={g.group_id} style={{ background: 'var(--surface-strong)', color: 'var(--ink)', padding: '6px 14px', borderRadius: 'var(--rounded-pill)', fontSize: '0.9rem', fontWeight: 600 }}>
-                {g.name}
-              </span>
-            ))}
-          </div>
+          <p style={{ marginBottom: '20px', lineHeight: '1.5' }}>시간표에 배정할 학년을 선택하고 간편하게 관리하세요.</p>
           <button className="btn btn-pink" onClick={() => navigate('/groups')}>
             그룹 관리하러 가기
           </button>
