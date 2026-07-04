@@ -38,6 +38,8 @@ const TimetableEditor = () => {
   const [autoFillHours, setAutoFillHours] = useState(1);
   const [consecutiveHours, setConsecutiveHours] = useState(1);
   const [allowOverlap, setAllowOverlap] = useState(false);
+  const [instructorOption, setInstructorOption] = useState('2');
+  const [customInstructorCount, setCustomInstructorCount] = useState(5);
   const [autoFillResult, setAutoFillResult] = useState<string | null>(null);
   const [lastClassBlocks, setLastClassBlocks] = useState<ClassBlock[] | null>(null);
 
@@ -100,19 +102,23 @@ const TimetableEditor = () => {
               break;
             }
 
-            if (!allowOverlap) {
-              const subjectOverlap = [...classBlocks, ...newBlocks].some(
-                b =>
-                  b.group_id === autoFillGrade &&
-                  b.subject_id === autoFillSubject.trim() &&
-                  b.day_of_week === day.key &&
-                  b.period_start <= p &&
-                  b.period_start + b.duration > p
-              );
-              if (subjectOverlap) {
-                canAssign = false;
-                break;
-              }
+            let maxInstructors = 1;
+            if (allowOverlap) {
+              maxInstructors = instructorOption === 'custom' ? customInstructorCount : parseInt(instructorOption);
+            }
+
+            const subjectOverlapCount = [...classBlocks, ...newBlocks].filter(
+              b =>
+                b.group_id === autoFillGrade &&
+                b.subject_id === autoFillSubject.trim() &&
+                b.day_of_week === day.key &&
+                b.period_start <= p &&
+                b.period_start + b.duration > p
+            ).length;
+
+            if (subjectOverlapCount >= maxInstructors) {
+              canAssign = false;
+              break;
             }
           }
 
@@ -523,7 +529,7 @@ const TimetableEditor = () => {
             </div>
           </div>
         </div>
-        <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}>
+        <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
           <label style={{ display: 'flex', alignItems: 'center', cursor: 'pointer', fontSize: '0.9rem', color: '#2f3640' }}>
             <input 
               type="checkbox" 
@@ -533,6 +539,36 @@ const TimetableEditor = () => {
             />
             같은 시간 배정 허용 <span style={{ color: 'var(--brand-pink)', marginLeft: '6px', fontSize: '0.85rem', fontWeight: 600 }}>(체크 해제 시 강사 1명으로 간주하여 다른 반과 겹치지 않게 배정)</span>
           </label>
+          {allowOverlap && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginLeft: '10px' }}>
+              <span style={{ fontSize: '0.9rem', fontWeight: 500, color: 'var(--ink)' }}>동시 수업 강사 수:</span>
+              <select
+                value={instructorOption}
+                onChange={e => setInstructorOption(e.target.value)}
+                className="autofill-select"
+                style={{ height: '32px', padding: '0 8px', fontSize: '0.9rem' }}
+              >
+                <option value="2">강사 2명</option>
+                <option value="3">강사 3명</option>
+                <option value="4">강사 4명</option>
+                <option value="custom">기타</option>
+              </select>
+              {instructorOption === 'custom' && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <input
+                    type="number"
+                    min={2}
+                    max={20}
+                    value={customInstructorCount}
+                    onChange={e => setCustomInstructorCount(Math.max(2, parseInt(e.target.value) || 2))}
+                    className="autofill-input"
+                    style={{ height: '32px', width: '60px', padding: '0 8px', textAlign: 'center' }}
+                  />
+                  <span style={{ fontSize: '0.9rem', color: 'var(--ink)' }}>명</span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
         {autoFillResult && (
           <div className={`autofill-result ${autoFillResult.startsWith('✅') ? 'autofill-result-ok' : 'autofill-result-err'}`}>
