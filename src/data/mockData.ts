@@ -56,20 +56,7 @@ export const mockData = {
       holidays: ["2026-05-05", "2026-09-24", "2026-10-09"],
     },
   ],
-  groups: [
-    {
-      group_id: "GRP_A",
-      name: "배정 대상",
-      dynamic: true,
-      memberGradeIds: [],
-    },
-    {
-      group_id: "GRP_B",
-      name: "학년",
-      dynamic: true,
-      memberGradeIds: ["G1", "G2", "G3", "G4", "G5", "G6"],
-    },
-  ],
+  groups: [],
   templateSets: [
     {
       templateSetId: "TPL_BASE",
@@ -99,34 +86,6 @@ export const mockData = {
       ],
     },
   ],
-  templateAssignments: [
-    { group_id: "GRP_A", templateBlockIds: ["TB_A1", "TB_A2"] },
-    { group_id: "GRP_B", templateBlockIds: ["TB_B1"] },
-  ],
-  classBlocks: [
-    {
-      block_id: "CB001",
-      year_id: "2026",
-      subject_id: "SUB001",
-      teacher_id: "T001",
-      room_id: "R001",
-      group_id: "GRP_A",
-      day_of_week: "Mon",
-      period_start: 1,
-      duration: 2,
-      isExternal: false,
-    },
-    {
-      block_id: "CB002",
-      year_id: "2026",
-      subject_id: "SUB003",
-      teacher_id: "T002",
-      room_id: "R002",
-      group_id: "GRP_B",
-      day_of_week: "Tue",
-      period_start: 3,
-      duration: 2,
-      isExternal: true,
-    },
-  ],
+  templateAssignments: [],
+  classBlocks: [],
 };
