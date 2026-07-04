@@ -138,10 +138,10 @@ const Dashboard = () => {
             onChange={handleFileChange} 
           />
           <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
-            <button className="btn" style={{ flex: 1, fontSize: '16px', fontWeight: 'bold' }} onClick={handleUploadClick}>
+            <button className="btn btn-pink" style={{ flex: 1, fontSize: '16px', fontWeight: 'bold' }} onClick={handleUploadClick}>
               <Sparkles size={20} /> 시간표 불러오기
             </button>
-            <button className="btn btn-secondary" style={{ flex: 1, fontSize: '16px', fontWeight: 'bold' }} onClick={() => navigate('/groups')}>
+            <button className="btn btn-pink" style={{ flex: 1, fontSize: '16px', fontWeight: 'bold' }} onClick={() => navigate('/groups')}>
               <Users size={20} /> 시간표 배정하기
             </button>
           </div>
@@ -160,7 +160,7 @@ const Dashboard = () => {
               </span>
             ))}
           </div>
-          <button className="btn btn-secondary" onClick={() => navigate('/groups')}>
+          <button className="btn btn-pink" onClick={() => navigate('/groups')}>
             그룹 관리하러 가기
           </button>
         </div>

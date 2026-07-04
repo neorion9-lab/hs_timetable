@@ -250,6 +250,16 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--ink);
 }
 
+.btn-pink {
+  background-color: var(--brand-pink);
+  color: var(--on-primary);
+  border: none;
+}
+
+.btn-pink:hover {
+  opacity: 0.9;
+}
+
 /* Teacher ID Card */
 .teacher-id-card {
   margin-top: auto;
