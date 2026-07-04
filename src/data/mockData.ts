@@ -56,7 +56,20 @@ export const mockData = {
       holidays: ["2026-05-05", "2026-09-24", "2026-10-09"],
     },
   ],
-  groups: [],
+  groups: [
+    {
+      group_id: "GRP_A",
+      name: "배정 대상",
+      dynamic: true,
+      memberGradeIds: [],
+    },
+    {
+      group_id: "GRP_B",
+      name: "학년",
+      dynamic: true,
+      memberGradeIds: ["G1", "G2", "G3", "G4", "G5", "G6"],
+    }
+  ],
   templateSets: [
     {
       templateSetId: "TPL_BASE",
