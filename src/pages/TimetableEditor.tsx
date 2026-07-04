@@ -531,7 +531,7 @@ const TimetableEditor = () => {
               onChange={e => setAllowOverlap(e.target.checked)} 
               style={{ marginRight: '8px', cursor: 'pointer', width: '16px', height: '16px' }}
             />
-            같은 시간 배정 허용 <span style={{ color: '#7f8fa6', marginLeft: '6px', fontSize: '0.8rem' }}>(체크 해제 시 강사 1명으로 간주하여 다른 반과 겹치지 않게 배정)</span>
+            같은 시간 배정 허용 <span style={{ color: 'var(--brand-pink)', marginLeft: '6px', fontSize: '0.85rem', fontWeight: 600 }}>(체크 해제 시 강사 1명으로 간주하여 다른 반과 겹치지 않게 배정)</span>
           </label>
         </div>
         {autoFillResult && (
