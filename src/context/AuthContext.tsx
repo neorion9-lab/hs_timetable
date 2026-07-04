@@ -43,10 +43,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signInWithGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+      
+      // 모바일 기기(카카오톡 등 인앱 브라우저 포함)인 경우 팝업 차단을 방지하기 위해 바로 리다이렉트 방식 사용
+      const isMobile = /iPhone|iPad|iPod|Android|Kakao/i.test(navigator.userAgent);
+      
+      if (isMobile) {
+        await signInWithRedirect(auth, provider);
+      } else {
+        await signInWithPopup(auth, provider);
+      }
     } catch (error: any) {
       if (error.code === 'auth/popup-blocked') {
-        alert(`팝업이 차단되었거나 카카오톡/연수원 내부 브라우저입니다.\n\n오류가 반복될 경우, 화면 우측 상단(또는 하단)의 메뉴(⋮)를 눌러 [다른 브라우저로 열기(크롬, 사파리 등)]를 선택해주세요.\n\n확인을 누르시면 리다이렉트 로그인을 시도합니다.`);
+        // 팝업이 차단된 경우 에러창을 띄우지 않고 자연스럽게 리다이렉트 로그인으로 전환
         const provider = new GoogleAuthProvider();
         await signInWithRedirect(auth, provider);
       } else {
