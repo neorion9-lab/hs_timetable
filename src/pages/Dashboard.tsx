@@ -123,7 +123,7 @@ const Dashboard = () => {
       </p>
 
       <div className="dashboard-grid">
-        <div className="product-mockup-card">
+        <div className="product-mockup-card" style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
             <CalendarPlus size={24} color="var(--ink)" />
             <h2 style={{ margin: 0 }}>시간표 만들기</h2>
@@ -137,7 +137,7 @@ const Dashboard = () => {
             accept=".xlsx,.xls,.csv,.json"
             onChange={handleFileChange} 
           />
-          <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+          <div style={{ display: 'flex', gap: '10px', marginTop: 'auto', paddingTop: '20px' }}>
             <button className="btn btn-pink" style={{ flex: 1, fontSize: '16px', fontWeight: 'bold' }} onClick={handleUploadClick}>
               <Sparkles size={20} /> 시간표 불러오기
             </button>
@@ -147,13 +147,13 @@ const Dashboard = () => {
           </div>
         </div>
 
-        <div className="product-mockup-card">
+        <div className="product-mockup-card" style={{ display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '15px' }}>
             <Users size={24} color="var(--ink)" />
             <h2 style={{ margin: 0 }}>학년 그룹 현황</h2>
           </div>
           <p style={{ marginBottom: '20px', lineHeight: '1.5' }}>시간표에 배정할 학년을 선택하고 간편하게 관리하세요.</p>
-          <button className="btn btn-pink" onClick={() => navigate('/groups')}>
+          <button className="btn btn-pink" onClick={() => navigate('/groups')} style={{ marginTop: 'auto', alignSelf: 'flex-start' }}>
             그룹 관리하러 가기
           </button>
         </div>
