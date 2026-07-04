@@ -356,27 +356,31 @@ const TimetableEditor = () => {
           </div>
           <div className="autofill-field">
             <label>학급 수</label>
-            <input
-              type="number"
-              min={1}
-              max={20}
-              value={autoFillClassCount}
-              onChange={e => setAutoFillClassCount(Math.max(1, parseInt(e.target.value) || 1))}
-              className="autofill-input autofill-input-sm"
-            />
-            <span className="autofill-unit">반</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <input
+                type="number"
+                min={1}
+                max={20}
+                value={autoFillClassCount}
+                onChange={e => setAutoFillClassCount(Math.max(1, parseInt(e.target.value) || 1))}
+                className="autofill-input autofill-input-sm"
+              />
+              <span className="autofill-unit" style={{ fontSize: '15px', fontWeight: 500 }}>반</span>
+            </div>
           </div>
           <div className="autofill-field">
             <label>반별 배정 시간</label>
-            <input
-              type="number"
-              min={1}
-              max={6}
-              value={autoFillHours}
-              onChange={e => setAutoFillHours(Math.max(1, parseInt(e.target.value) || 1))}
-              className="autofill-input autofill-input-sm"
-            />
-            <span className="autofill-unit">시간</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <input
+                type="number"
+                min={1}
+                max={6}
+                value={autoFillHours}
+                onChange={e => setAutoFillHours(Math.max(1, parseInt(e.target.value) || 1))}
+                className="autofill-input autofill-input-sm"
+              />
+              <span className="autofill-unit" style={{ fontSize: '15px', fontWeight: 500 }}>시간</span>
+            </div>
           </div>
           <div className="autofill-field">
               <label>연속 차시</label>
