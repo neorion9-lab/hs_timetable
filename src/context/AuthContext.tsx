@@ -43,6 +43,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const signInWithGoogle = async () => {
     try {
       const provider = new GoogleAuthProvider();
+      provider.setCustomParameters({ prompt: 'select_account' });
       
       // 모바일 기기(카카오톡 등 인앱 브라우저 포함)인 경우 팝업 차단을 방지하기 위해 바로 리다이렉트 방식 사용
       const isMobile = /iPhone|iPad|iPod|Android|Kakao/i.test(navigator.userAgent);
@@ -56,6 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       if (error.code === 'auth/popup-blocked') {
         // 팝업이 차단된 경우 에러창을 띄우지 않고 자연스럽게 리다이렉트 로그인으로 전환
         const provider = new GoogleAuthProvider();
+        provider.setCustomParameters({ prompt: 'select_account' });
         await signInWithRedirect(auth, provider);
       } else {
         console.error('Login Error:', error);
