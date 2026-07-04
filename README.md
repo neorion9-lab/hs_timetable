@@ -1,32 +1,57 @@
-# React + TypeScript + Vite
+# 🪄 시수마법사 (초등학교 시간표 자동 배정 프로그램)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+**시수마법사**는 초등학교 교무부장님과 시간표 담당 선생님들을 위해 만들어진 **가장 직관적이고 강력한 시간표 자동 배정 웹 애플리케이션**입니다. 
+복잡한 전담 교사 배정, 스포츠 강사, 원어민 교사 시간표 작성 업무를 단 한 번의 클릭으로 해결해 줍니다.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## ✨ 주요 기능 안내
 
-## React Compiler
+### 1. 🔐 구글 간편 로그인 (Google OAuth 2.0)
+- 복잡한 회원가입 없이 학교에서 사용하시는 구글 계정으로 단 1초 만에 안전하게 로그인할 수 있습니다.
+- 브라우저를 닫아도 로그인 상태가 유지되는 **자동 로그인** 기능을 지원하여 편리하게 재접속할 수 있습니다.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 2. 🧑‍🤝‍🧑 직관적인 그룹 관리 (Drag & Drop)
+- 학교마다 시간표를 작성하는 학년이 다를 수 있습니다. (예: 1~2학년군 제외 등)
+- **드래그 앤 드롭** 방식을 통해 시간표를 작성할 학년만 '배정 대상' 그룹으로 손쉽게 끌어다 놓아 관리할 수 있습니다.
+- 배정 대상에 포함된 학년의 시간표 칸만 에디터에 깔끔하게 생성됩니다.
 
-## Expanding the Oxlint configuration
+### 3. 🤖 초강력 자동 배정 엔진 (Auto-fill)
+시간표 작성의 가장 큰 고충인 '전담 시간표 겹치지 않게 짜기'를 완벽하게 자동화했습니다.
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+- **원클릭 자동 배정**: 원하는 과목(예: 체육), 대상 학년, 반 수, 반별 배정 시간을 입력하고 [자동 배정]을 누르면 빈 시간을 스스로 찾아 전체 반에 한 번에 배정합니다.
+- **연속 차시 배정 (블록 타임)**: 미술, 실과 등 2시간 연달아 들어야 하는 과목도 '2차시 연속' 옵션으로 완벽하게 배정합니다.
+- **강사 수 기반 스마트 배정 (핵심 기능 🌟)**: 
+  - 기본적으로 한 명의 교사가 가르친다고 간주하여 **모든 반이 겹치지 않게 다른 시간에 배정**됩니다.
+  - 스포츠 강사나 원어민 교사 등 **여러 명의 강사가 동시에 들어올 수 있는 경우**, '같은 시간 배정 허용' 체크박스를 누르고 **강사 수(2명, 3명, 4명, 혹은 직접 입력)**를 지정할 수 있습니다.
+  - 지정된 강사 수 내에서만 같은 시간에 배정되도록 AI 엔진이 스스로 계산하여 최적의 시간표를 구성합니다.
+- **되돌리기(Undo)**: 방금 자동 배정한 결과가 마음에 들지 않으면 즉시 [되돌리기] 버튼으로 이전 상태로 원상 복구할 수 있습니다.
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+### 4. ✏️ 간편한 수동 편집 및 일괄 수정
+- **개별 수정**: 시간표 칸의 점 3개(더보기) 버튼을 눌러 수업을 추가, 변경, 삭제할 수 있습니다.
+- **수업 일괄 추가**: 상단 드롭다운에서 추가할 과목을 선택한 뒤, 캘린더의 빈칸들을 톡톡 클릭하기만 하면 해당 과목이 한 번에 쑥쑥 추가됩니다.
+- **수업 일괄 삭제**: 삭제 모드를 켜고 지우고 싶은 수업들을 연속해서 선택한 뒤 한 번에 지울 수 있습니다.
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+### 5. 📊 엑셀 호환 (불러오기 및 저장하기)
+- **기본 뼈대 불러오기**: 기존에 작성해 둔 기초 시간표 엑셀 파일을 업로드하면 화면에 즉시 렌더링됩니다.
+- **엑셀 다운로드**: 모든 배정이 완료된 후 [변경된 시간표 저장하기] 버튼을 누르면, 교무실에서 즉시 인쇄해서 쓸 수 있는 완벽한 형태의 엑셀 파일(.xlsx)로 다운로드됩니다.
+
+---
+
+## 🎨 기술 스택 및 UI/UX
+- **Frontend Framework**: React 18 (Vite)
+- **Styling**: 순수 CSS (CSS Variables 기반 디자인 시스템), 감각적인 마이크로 애니메이션, 둥근 모서리(border-radius) 중심의 모던 UI 설계
+- **Icons**: Lucide React
+- **Authentication**: Firebase Authentication (Google Auth Provider)
+- **Data Export/Import**: SheetJS (xlsx)
+- **Drag & Drop**: @dnd-kit/core
+
+---
+
+## 🚀 시작하기
+
+1. `npm install` 로 의존성을 설치합니다.
+2. `npm run dev` 로 로컬 개발 서버를 실행합니다.
+3. 구글 클라우드 콘솔에서 OAuth 2.0 클라이언트를 생성하고 승인된 리디렉션 URI를 추가해야 로그인이 정상 동작합니다.
+
+> **Made with ❤️ by 시수마법사 팀 (Antigravity & User)**
