@@ -382,7 +382,7 @@ const Footer = () => {
           {/* 정보관리책임자 */}
           <div className="footer-manager">
             <User size={13} />
-            <span>정보관리책임자: 이현실</span>
+            <span>정보관리책임자: 서울개원초등학교 이현실</span>
           </div>
 
           {/* 카피라이트 */}
