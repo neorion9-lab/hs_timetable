@@ -1,6 +1,6 @@
 
 import { useTimetable } from '../context/TimetableContext';
-import { Sparkles, CalendarPlus, Users } from 'lucide-react';
+import { Sparkles, CalendarPlus, Users, Download } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useRef } from 'react';
 
@@ -141,9 +141,14 @@ const Dashboard = () => {
             <button className="btn btn-pink" style={{ flex: 1, fontSize: '16px', fontWeight: 'bold' }} onClick={handleUploadClick}>
               <Sparkles size={20} /> 시간표 불러오기
             </button>
-            <button className="btn btn-pink" style={{ flex: 1, fontSize: '16px', fontWeight: 'bold' }} onClick={() => navigate('/groups')}>
-              <Users size={20} /> 시간표 배정하기
-            </button>
+            <a 
+              className="btn btn-pink" 
+              style={{ flex: 1, fontSize: '16px', fontWeight: 'bold', textDecoration: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }} 
+              href="/timetable_template.xlsx"
+              download="시간표_양식.xlsx"
+            >
+              <Download size={20} /> 양식 다운로드
+            </a>
           </div>
         </div>
 
