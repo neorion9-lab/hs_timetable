@@ -122,7 +122,7 @@ const Login = () => {
         opacity: 0.5,
         marginTop: '16px'
       }}>
-        ⓒ 2026 서울개원초등학교 교사 이현실. All rights reserved.
+        ⓒ 2026 Hyunsil_ORION. All rights reserved.
       </footer>
     </div>
   );
