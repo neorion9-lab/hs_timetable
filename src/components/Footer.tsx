@@ -387,7 +387,7 @@ const Footer = () => {
 
           {/* 카피라이트 */}
           <div className="footer-copyright">
-            © 2026 시수 마법사. All rights reserved.
+            © 2026 Hyunsil_ORION. All rights reserved.
           </div>
         </div>
       </footer>
