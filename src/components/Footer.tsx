@@ -386,8 +386,8 @@ const Footer = () => {
           </div>
 
           {/* 카피라이트 */}
-          <div className="footer-copyright">
-            © 2026 Hyunsil_ORION. All rights reserved.
+          <div className="footer-copyright" style={{ fontWeight: 'bold', color: '#2f3640', fontSize: '14px', marginTop: '10px' }}>
+            저작권: © 2026 Hyunsil_ORION. All rights reserved.
           </div>
         </div>
       </footer>

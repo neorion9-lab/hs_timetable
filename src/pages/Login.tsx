@@ -117,12 +117,12 @@ const Login = () => {
       
       <footer style={{
         textAlign: 'center',
-        fontSize: '13px',
-        color: 'var(--body)',
-        opacity: 0.5,
+        fontSize: '14px',
+        color: '#2f3640',
+        fontWeight: 'bold',
         marginTop: '16px'
       }}>
-        ⓒ 2026 Hyunsil_ORION. All rights reserved.
+        저작권: ⓒ 2026 Hyunsil_ORION. All rights reserved.
       </footer>
     </div>
   );
