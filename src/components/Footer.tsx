@@ -387,7 +387,7 @@ const Footer = () => {
 
           {/* 카피라이트 */}
           <div className="footer-copyright">
-            저작권: © 2026 Hyunsil_ORION. All rights reserved.
+            © 2026 Hyunsil_ORION. All rights reserved.
           </div>
         </div>
       </footer>
